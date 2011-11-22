@@ -2,29 +2,21 @@
 
         var server = require('./lib/server').createServer({port: 3000, httpPort: 3001});
 
-        server.register('foobar1',
-            ['foo', 'bar'],
+        server.register({bar: 'foo'},
             function (data, client, next){
-              client.send('foo='+data.foo+", bar="+data.bar);
+              client.send({data: 'I received bar : foo'});
               next();
         });
 
-        server.register('foobar2',
-            ['foo', 'bar'],
+        server.register({kills: {$gt:5}},
             function (data, client, next){
-              client.send(['foo', data.foo, 'bar', data.bar]);
+              client.send("Kills where greater than 5");
               next();
         });
 
-        server.register('foobar3',
-            ['foo', 'bar'],
+        server.register({echo: {'$exists':true}},
             function (data, client, next){
-              next(new Error('this fails'));
-        });
-
-        server.register('foobar4',
-            ['foo', 'bar'],
-            function (data, client, next){
+              client.send(data.echo);
               next();
         });
 
@@ -33,20 +25,11 @@
         });
 
 # Example request and responses
-        $ printf "test|kissa|koira|123\r\n" |nc -n 127.0.0.1 3000
-        123|ERR|channel test doesn't exist
+        $ printf '{"bar":"foo"}\r\n' |nc -n 127.0.0.1 3000
+        {"data":"I received bar : foo"}
 
-        $ printf "foobar1|kissa|koira|123\r\n" |nc -n 127.0.0.1 3000
-        123|OK|foo=kissa, bar=koira
+        $ printf '{"kills":6}\r\n' |nc -n 127.0.0.1 3000
+        "Kills where greater than 5"
 
-        $ printf "foobar2|kissa|koira|123\r\n" |nc -n 127.0.0.1 3000
-        123|OK|foo|kissa|bar|koira
-
-        $ printf "foobar3|kissa|koira|123\r\n" |nc -n 127.0.0.1 3000
-        123|ERR|this fails
-
-        $ printf "foobar4|kissa|koira|123\r\n" |nc -n 127.0.0.1 3000
-        123|OK
-
-        $ printf "foobar4|kissa|koira|koira2|123\r\n" |nc -n 127.0.0.1 3000
-        123|ERR|invalid amount of values, should be 2 + id (optional)
+        $ printf '{"echo":"this will be echoed"}\r\n' |nc -n 127.0.0.1 3000
+        "this will be echoed"
