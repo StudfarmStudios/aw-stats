@@ -1,0 +1,9 @@
+{
+ "name":"aw-stats",
+ "version":"0.0.1",
+ "description":"",
+ "author":"Jaakko Lukkari",
+ "dependencies" : {
+     "querify" : "0.2.3"
+ }
+}
