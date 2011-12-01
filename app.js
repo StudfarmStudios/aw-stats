@@ -1,23 +1,30 @@
-var server = require('./lib/server').createServer({port: 3000, httpPort: 3001});
+var cluster = require('cluster');
+var numberOfWorkers = require('os').cpus().length;
 
-server.register({bar: 'foo'},
-    function (data, client, next) {
-      client.send({data: 'I received bar : foo'});
-      next();
-    });
+if (numberOfWorkers > 4) {
+  numberOfWorkers = 4;
+}
 
-server.register({kills: {$gt:5}},
-    function (data, client, next) {
-      client.send("Kills where greater than 5");
-      next();
-    });
+if (cluster.isMaster) {
+  var workers = 0;
+  for(var i = 0; i < numberOfWorkers; i++) {
+    cluster.fork();
+    workers++;
+  }
 
-server.register({echo: {'$exists':true}},
-    function (data, client, next) {
-      client.send(data.echo);
-      next();
-    });
+  cluster.on('death', function(worker) {
+    workers--;
+    console.log('worker ' + worker.pid + ' died. restarting in 1 second...');
+    setTimeout(function(){
+      cluster.fork();
+    }, 1);
+  });
 
-server.listen(function () {
-  console.log('Server started');
-});
+  require('./http.js');
+} else {
+  console.log("Worker started " + process.pid);
+  require('./stats.js');
+}
+
+
+

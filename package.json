@@ -4,6 +4,9 @@
  "description":"",
  "author":"Jaakko Lukkari",
  "dependencies" : {
-     "querify" : "0.2.3"
+     "querify" : "0.2.3",
+     "express" : "2.5.1",
+     "mongodb" : "0.9.7-1.3",
+     "sechash" : "0.1.2"
  }
 }
