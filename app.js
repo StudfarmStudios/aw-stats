@@ -20,9 +20,10 @@ if (cluster.isMaster) {
     }, 1);
   });
 
-  require('./http.js');
+
 } else {
   console.log("Worker started " + process.pid);
+  require('./http.js');
   require('./stats.js');
 }
 
