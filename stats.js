@@ -5,6 +5,7 @@ var server = require('./lib/server').createServer(3000);
 // ALLOWED IPS
 server.allow('127.0.0.1');
 server.allow('62.75.224.66');
+server.allow('82.181.67.118');
 
 // LOG EVERY REQUEST
 server.register({}, statsMiddlewares.log());
