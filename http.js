@@ -6,6 +6,7 @@ var app = express.createServer();
 // TODO SOME KIND OF TOKEN FOR ALL THE ROUTES
 app.get('/pilot/create', middlewares.pilot.create(true));
 app.get('/pilot/list', middlewares.pilot.list(true));
+app.get('/pilot/search', middlewares.pilot.search(true));
 app.get('/pilot/id/:id', middlewares.pilot.loader(true));
 app.get('/pilot/:username', middlewares.pilot.loader(true));
 
