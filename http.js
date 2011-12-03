@@ -11,6 +11,10 @@ app.get('/pilot/:username', middlewares.pilot.loader(true));
 
 app.get('/login', middlewares.pilot.login(true));
 
+app.error(function(err, req, res, next){
+    res.send({error: err.message});
+});
+
 app.listen(3001, function (err) {
   if (err) {
     return console.log(err.message);
