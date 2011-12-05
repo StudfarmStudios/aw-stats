@@ -3,8 +3,8 @@ var middlewares = require('./lib/middleware/http');
 var fs = require('fs');
 
 var options = {
-  key: fs.readFileSync(__dirname + '/server.key'),
-  cert: fs.readFileSync(__dirname + '/server.crt')
+  key: fs.readFileSync(__dirname + '/key.pem'),
+  cert: fs.readFileSync(__dirname + '/cert.pem')
 };
 
 function defineRoutesAndMiddleware(app) {
