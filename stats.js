@@ -38,6 +38,12 @@ server.register(
     statsMiddlewares.shipInfo()
 );
 
+server.register(
+    {$has : ['Bonus', 'Player']},
+    statsMiddlewares.getPilot('Player', '_pilot'),
+    statsMiddlewares.bonus()
+);
+
 // START LISTENING
 server.listen(function (err) {
   if (err) {
