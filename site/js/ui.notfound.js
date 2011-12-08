@@ -10,6 +10,7 @@
     var content = $(contentHtml);
     content.find('h1 small').html(hash);
     $('.container .content').html(content);
+    $('.nav li').removeClass('active');
   };
 
   if (window.aw == undefined) {
