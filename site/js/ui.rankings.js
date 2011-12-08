@@ -43,7 +43,7 @@
           var pilotElement = $(pilotHtml);
           pilotElement.find('a').html(pilot.username);
           pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-          pilotElement.find('.score').html('('+pilot.score+')');
+          pilotElement.find('.score').html('('+(pilot.score && pilot.score.total ? pilot.score.total : 0)+')');
           pilotList.append(pilotElement);
         });
       });
@@ -63,7 +63,7 @@
         var pilotElement = $(pilotHtml);
         pilotElement.find('a').html(pilot.username);
         pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-        pilotElement.find('.score').html('('+pilot.score+')');
+        pilotElement.find('.score').html('('+(pilot.score && pilot.score.total ? pilot.score.total : 0)+')');
         scoreList.append(pilotElement);
       });
     });
