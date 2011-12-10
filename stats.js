@@ -47,7 +47,7 @@ server.register(
 server.register(
     {$has : ['Ship', 'Weapon2', 'Device', 'Player']},
     statsMiddlewares.getPilot('Player', '_pilot'),
-    statsMiddlewares.commands.shipInfo()
+    statsMiddlewares.commands.shipinfo()
 );
 
 server.register(
