@@ -38,7 +38,7 @@
         return;
       }
 
-      title.html(username + " <small>Score: "+pilot.score+", Rating: " + (pilot.rating || 1500) + "</small>");
+      title.html(username + " <small>Score: "+(pilot.score || 0)+", Rating: " + (pilot.rating || 1500) + "</small>");
       content.find('.lastSeen').html(pilot.lastSeen);
       content.find('.created').html(pilot.created);
       content.find('.playTime').html((pilot.playTime || 0) + " hrs");
