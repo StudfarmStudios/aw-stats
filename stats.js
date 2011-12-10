@@ -17,7 +17,7 @@ server.register(
 
 server.register(
     {AddPlayer: {$exists:true}},
-    statsMiddlewares.getPilot('AddPlayer', '_pilot'),
+    statsMiddlewares.getPilot('AddPlayer', '_pilot', true),
     statsMiddlewares.commands.addPlayer()
 );
 
