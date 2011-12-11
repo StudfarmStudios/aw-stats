@@ -75,7 +75,7 @@
         var pilotElement = $(pilotHtml);
         pilotElement.find('a').html(pilot.username);
         pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-        pilotElement.find('.score').html('('+(pilot.score ? pilot.score : 0)+')');
+        pilotElement.find('.score').html('('+(pilot.rating ? pilot.rating : 1500)+')');
         ratingList.append(pilotElement);
       });
     });
