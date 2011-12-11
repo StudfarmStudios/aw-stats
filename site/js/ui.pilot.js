@@ -75,8 +75,6 @@
           return;
         }
 
-        console.log(rankings);
-
         for (var type in rankings) {
           var suffix = "th";
           var value = rankings[type];
