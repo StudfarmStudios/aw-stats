@@ -27,6 +27,11 @@
   var pilotHtml = ''
         + '<li class="pilot"><a href="#"></a> <small class="score"></small></li>';
 
+  function roundNumber(num, dec) {
+	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	  return result;
+  }
+
   function constructPilotList() {
     var page = 0;
     var limit = 15;
@@ -75,7 +80,7 @@
         var pilotElement = $(pilotHtml);
         pilotElement.find('a').html(pilot.username);
         pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-        pilotElement.find('.score').html('('+(pilot.rating ? pilot.rating : 1500)+')');
+        pilotElement.find('.score').html('('+roundNumber((pilot.rating ? pilot.rating : 1500),2)+')');
         ratingList.append(pilotElement);
       });
     });
