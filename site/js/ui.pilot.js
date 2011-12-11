@@ -24,6 +24,10 @@
         + '</div>'
         + '';
 
+  function roundNumber(num, dec) {
+	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	  return result;
+  }
 
   var pilot = function (hash) {
     var parts = hash.split('/');
@@ -38,10 +42,10 @@
         return;
       }
 
-      title.html(username + " <small>Score: "+(pilot.score || 0)+", Rating: " + (pilot.rating || 1500) + "</small>");
+      title.html(username + " <small>Score: "+(pilot.score || 0)+", Rating: " + (Math.round(pilot.rating || 1500)) + "</small>");
       content.find('.lastSeen').html(pilot.lastSeen);
       content.find('.created').html(pilot.created);
-      content.find('.playTime').html((pilot.playTime || 0) + " hrs");
+      content.find('.playTime').html(roundNumber((pilot.playTime || 0),2) + " hrs");
       window.aw.stats.ratings(pilot._id, function (rankings) {
         if (pilot.error) {
           return;
