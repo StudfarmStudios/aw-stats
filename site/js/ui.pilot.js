@@ -7,19 +7,22 @@
         + '  <h1></h1>'
         + '</div>'
         + '<div class="row">'
-        + '  <div class="span8">'
+        + '  <div class="span9">'
         + '    <div class="row"><div class="span2"><b>Last played</b></div><div class="span6 lastSeen">Loading</div></div>'
         + '    <div class="row"><div class="span2"><b>Registered</b></div><div class="span6 created">Loading</div></div>'
         + '    <div class="row"><div class="span2"><b>Flight hours</b></div><div class="span6 playTime">Loading</div></div>'
         + '    <br /><h2>Most used</h2>'
+        + '    <div class="row most-used-title-row"><div class="span3"><b>Ship</b></div><div class="span3"><b>Weapon</b></div><div class="span3"><b>Mod</b></div></div>'
+        + '    <div class="row most-used-image-row"><div class="span3 ship-image"></div><div class="span3 weapon2-image"></div><div class="span3 device-image"></div></div>'
+        + '    <div class="row most-used-text-row"><div class="span3 ship-text"></div><div class="span3 weapon2-text"></div><div class="span3 device-text"></div></div>'
         + '  </div>'
-        + '  <div class="span5 well">'
+        + '  <div class="span4 well">'
         + '    <h3>Rankings</h3>'
-        + '    <div class="row"><div class="span2"><b>Rating</b></div><div class="span3 rating-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span3 score-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span3 kills-total-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span3 wins-total-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span3 playTime-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Rating</b></div><div class="span2 rating-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span2 score-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span2 kills-total-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span2 wins-total-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span2 playTime-rank">Loading</div></div>'
         + '  </div>'
         + '</div>'
         + '';
@@ -46,6 +49,32 @@
       content.find('.lastSeen').html(pilot.lastSeen);
       content.find('.created').html(pilot.created);
       content.find('.playTime').html(roundNumber((pilot.playTime || 0),2) + " hrs");
+
+
+      pilot.equipment = { "device" : { "blink" : 0.05767888888888889 }, "ship" : { "Windlord" : 0.05767888888888889 }, "weapon2" : { "bazooka" : 0.05767888888888889 } };
+
+      for (var type in pilot.equipment) {
+        console.log(type);
+        var maxValue = 0;
+        var maxName = null;
+        var total = 0;
+
+        for (var item in pilot.equipment[type]) {
+          console.log(item);
+          var value = pilot.equipment[type][item];
+          total += value;
+          if (value > maxValue) {
+            maxValue = value;
+            maxName = item;
+          }
+        }
+
+        content.find('.' + type + '-image').html('<img src="images/stats_'+maxName.toLowerCase()+'.png" />');
+        content.find('.' + type + '-text').html("(" + Math.round((maxValue / total) * 100) + "%)");
+
+      }
+
+
       window.aw.stats.ratings(pilot._id, function (rankings) {
         if (pilot.error) {
           return;
