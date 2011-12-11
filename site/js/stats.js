@@ -14,7 +14,12 @@
     this.api('/pilot/list', {page: page, limit:limit, sortBy:sort}, function (data) {
       if (data.error == undefined) {
         aw.cache.set(key, data, 60);
+        $.each(data, function (indx, pilot) {
+          aw.cache.set('pilot_' + pilot._id, pilot, 60);
+          aw.cache.set('pilot_' + pilot.username, pilot, 60);
+        });
       }
+
       callback(data);
     });
   };
