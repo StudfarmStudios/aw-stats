@@ -3,7 +3,8 @@
   var content,
       pilotList,
       showMorePilots,
-      scoreList;
+      scoreList,
+      ratingList;
 
   var contentHtml = ''
         + '<div class="page-header">'
@@ -13,6 +14,8 @@
         + '  <div class="span10">'
         + '    <h2>Scores (top 10)</h2>'
         + '    <ol class="score-list"></ol>'
+        + '    <h2>Ratings (top 10)</h2>'
+        + '    <ol class="rating-list"></ol>'
         + '  </div>'
         + '  <div class="span4">'
         + '    <h3>Pilots</h3>'
@@ -67,6 +70,15 @@
         scoreList.append(pilotElement);
       });
     });
+    window.aw.stats.pilots(1, 10, 'rating', function (pilots) {
+      $.each(pilots, function (indx, pilot) {
+        var pilotElement = $(pilotHtml);
+        pilotElement.find('a').html(pilot.username);
+        pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
+        pilotElement.find('.score').html('('+(pilot.score ? pilot.score : 0)+')');
+        ratingList.append(pilotElement);
+      });
+    });
   }
 
   var rankings = function () {
@@ -74,6 +86,7 @@
     pilotList = content.find('.pilot-list');
     showMorePilots = content.find('.more-pilots');
     scoreList = content.find('.score-list');
+    ratingList = content.find('.rating-list');
     $('.container .content').html(content);
     $('.nav li').removeClass('active');
     $('.nav .rankings').addClass('active');
