@@ -34,6 +34,20 @@
     });
   };
 
+  stats.ratings = function (id, callback) {
+    var key = 'pilot_ratings_' + id;
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/pilot/id/' + id + '/rankings', {}, function (data) {
+      if (data.error == undefined) {
+        aw.cache.set(key, data, 60);
+      }
+      callback(data);
+    });
+  };
+
   stats.pilotByUsername = function (username, callback) {
     var key = 'pilot_';
     var cachedData = aw.cache.get(key + username);

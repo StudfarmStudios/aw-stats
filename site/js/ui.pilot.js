@@ -15,11 +15,11 @@
         + '  </div>'
         + '  <div class="span5 well">'
         + '    <h3>Rankings</h3>'
-        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span3">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span3">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span3">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>K/D</b></div><div class="span3">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span3">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Rating</b></div><div class="span3 rating-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span3 score-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span3 kills-total-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span3 wins-total-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span3 playTime-rank">Loading</div></div>'
         + '  </div>'
         + '</div>'
         + '';
@@ -42,6 +42,27 @@
       content.find('.lastSeen').html(pilot.lastSeen);
       content.find('.created').html(pilot.created);
       content.find('.playTime').html((pilot.playTime || 0) + " hrs");
+      window.aw.stats.ratings(pilot._id, function (rankings) {
+        if (pilot.error) {
+          return;
+        }
+
+        console.log(rankings);
+
+        for (var type in rankings) {
+          var suffix = "th";
+          var value = rankings[type];
+          if (value == 1) {
+            suffix = "st";
+          } else if (value == 2) {
+            suffix = "nd";
+          }
+          content.find('.' + type.replace('.', '-') + '-rank').html(value + suffix);
+        }
+
+      })
+
+
     });
 
   };
