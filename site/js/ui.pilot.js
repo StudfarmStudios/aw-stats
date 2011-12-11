@@ -32,6 +32,10 @@
 	  return result;
   }
 
+  function capitaliseFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   var pilot = function (hash) {
     var parts = hash.split('/');
     username = parts.pop();
@@ -65,7 +69,7 @@
         }
 
         content.find('.' + type + '-image').html('<img src="images/stats_'+maxName.toLowerCase()+'.png" />');
-        content.find('.' + type + '-text').html("(" + Math.round((maxValue / total) * 100) + "%)");
+        content.find('.' + type + '-text').html("<b>"+capitaliseFirstLetter(maxName) + "</b><br/>(" + Math.round((maxValue / total) * 100) + "%)");
 
       }
 
