@@ -50,17 +50,12 @@
       content.find('.created').html(pilot.created);
       content.find('.playTime').html(roundNumber((pilot.playTime || 0),2) + " hrs");
 
-
-      pilot.equipment = { "device" : { "blink" : 0.05767888888888889 }, "ship" : { "Windlord" : 0.05767888888888889 }, "weapon2" : { "bazooka" : 0.05767888888888889 } };
-
       for (var type in pilot.equipment) {
-        console.log(type);
         var maxValue = 0;
         var maxName = null;
         var total = 0;
 
         for (var item in pilot.equipment[type]) {
-          console.log(item);
           var value = pilot.equipment[type][item];
           total += value;
           if (value > maxValue) {
