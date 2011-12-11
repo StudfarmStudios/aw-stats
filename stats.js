@@ -11,6 +11,11 @@ server.allow('82.181.67.118');
 server.register({}, statsMiddlewares.log());
 
 server.register(
+    {Server: {$exists:true}},
+    statsMiddlewares.commands.server()
+);
+
+server.register(
     {Arena: {$exists:true}},
     statsMiddlewares.commands.arena()
 );
