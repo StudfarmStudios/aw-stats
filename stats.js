@@ -16,6 +16,11 @@ server.register(
 );
 
 server.register(
+    {ArenaFinished: {$exists:true}},
+    statsMiddlewares.commands.arenafinished()
+);
+
+server.register(
     {AddPlayer: {$exists:true}},
     statsMiddlewares.getPilot('AddPlayer', '_pilot', true),
     statsMiddlewares.commands.addPlayer()
