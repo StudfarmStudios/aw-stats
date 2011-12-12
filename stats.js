@@ -27,7 +27,7 @@ server.register(
 
 server.register(
     {AddPlayer: {$exists:true}},
-    statsMiddlewares.getPilot('AddPlayer', '_pilot', true),
+    statsMiddlewares.getPilot('AddPlayer', '_pilot'),
     statsMiddlewares.commands.addPlayer()
 );
 
@@ -40,8 +40,8 @@ server.register(
 server.register(
     {Killer: {$exists:true}},
     statsMiddlewares.parallel([
-      statsMiddlewares.getPilot('Killer', '_killer'),
-      statsMiddlewares.getPilot('Victim', '_victim')
+      statsMiddlewares.getPilot('Killer', '_killer', true),
+      statsMiddlewares.getPilot('Victim', '_victim', true)
     ]),
     statsMiddlewares.commands.kill()
 );
@@ -49,20 +49,20 @@ server.register(
 server.register(
     {Suicide: {$exists:true}},
     statsMiddlewares.parallel([
-      statsMiddlewares.getPilot('Suicide', '_victim')
+      statsMiddlewares.getPilot('Suicide', '_victim', true)
     ]),
     statsMiddlewares.commands.suicide()
 );
 
 server.register(
     {$has : ['Ship', 'Weapon2', 'Device', 'Player']},
-    statsMiddlewares.getPilot('Player', '_pilot'),
+    statsMiddlewares.getPilot('Player', '_pilot', true),
     statsMiddlewares.commands.shipinfo()
 );
 
 server.register(
     {$has : ['Bonus', 'Player']},
-    statsMiddlewares.getPilot('Player', '_pilot'),
+    statsMiddlewares.getPilot('Player', '_pilot', true),
     statsMiddlewares.commands.bonus()
 );
 
