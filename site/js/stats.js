@@ -1,5 +1,5 @@
 (function (window) {
-  var stats = {url: "http://assaultwing.com:3001"};
+  var stats = {url: ""};
 
   stats.api = function (path, data, callback) {
     $.getJSON(this.url + path, data, callback);
