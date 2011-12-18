@@ -20,7 +20,11 @@ function defineRoutesAndMiddleware(app) {
   app.get('/login', middlewares.pilot.login(true));
 
   app.error(function(err, req, res, next) {
-    res.send({error: err.message});
+    var response = {error: err.message};
+    if (err.data) {
+      response.data = err.data;
+    }
+    res.send(response);
   });
 }
 
