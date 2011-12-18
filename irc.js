@@ -30,7 +30,7 @@ client.on('message', function (from, to, msg) {
         exports.say(err.message);
         return;
       }
-      exports.say(username + ", Score: " + (pilot.score || 0) +", Rating: " + (pilot.rating || 1500));
+      exports.say(username + ", Score: " + (pilot.score || 0) +", Rating: " + Math.round(pilot.rating || 1500));
     });
   }
 });
