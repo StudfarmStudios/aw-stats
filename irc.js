@@ -30,7 +30,10 @@ client.on('message', function (from, to, msg) {
         exports.say(err.message);
         return;
       }
-      exports.say(username + ", Score: " + (pilot.score || 0) +", Rating: " + Math.round(pilot.rating || 1500));
+      if (to == settings.irc.nick) {
+        to = from;
+      }
+      client.say(to, username + ", Score: " + (pilot.score || 0) +", Rating: " + Math.round(pilot.rating || 1500));
     });
   }
 });
