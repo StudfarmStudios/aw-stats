@@ -1,4 +1,5 @@
 var irc = require('irc');
+var pilotRepository = require('./lib/repositories/pilot');
 var settings = require('./lib/settings');
 
 var connected = false;
@@ -15,6 +16,23 @@ client.on('join', function () {
   messageBuffer.forEach(function (msg) {
     client.say(settings.irc.channel, msg);
   });
+});
+
+client.on('message', function (from, to, msg) {
+  if (msg.indexOf('!aw') === 0) {
+    var parts = msg.split(' ');
+    if (parts[0] != '!aw') {
+      return;
+    }
+    var username = parts[1] || from;
+    pilotRepository.getPilotByUsername(username, function (err, pilot) {
+      if (err) {
+        exports.say(err.message);
+        return;
+      }
+      exports.say(username + ", Score: " + (pilot.score || 0) +", Rating: " + (pilot.rating || 1500));
+    });
+  }
 });
 
 exports.say = function (msg) {
