@@ -1,5 +1,5 @@
 (function (window) {
-  var stats = {url: ""};
+  var stats = {url: parent.location.protocol + "//" + window.location.hostname + ":3001"};
 
   stats.api = function (path, data, callback) {
     $.getJSON(this.url + path, data, callback);
