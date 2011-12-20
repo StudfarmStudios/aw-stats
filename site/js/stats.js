@@ -2,7 +2,7 @@
   var stats = {url: parent.location.protocol + "//" + window.location.hostname + ":3001"};
 
   stats.api = function (path, data, callback) {
-    $.getJSON(this.url + path, data, callback);
+    $.getJSON(this.url + path + "?callback=?", data, callback);
   };
 
   stats.pilots = function (page, limit, sort, callback) {
