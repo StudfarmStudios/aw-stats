@@ -8,25 +8,47 @@ if (numberOfWorkers > 4) {
 if (cluster.isMaster) {
 
   var irc = require('./irc');
-
-  var workers = 0;
-  for(var i = 0; i < numberOfWorkers; i++) {
+  var workers = [];
+  var fork = function () {
     var worker = cluster.fork();
+    workers.push(worker);
+    var sendToOther = function (data) {
+      var i;
+      for (i = 0; i < workers.length; i++) {
+        var target = workers[i];
+        if (worker == target) {
+          return;
+        }
+        worker.send(data);
+      }
+    };
     worker.on('message', function (data) {
       if (typeof data == "object") {
-        if (data.cmd && data.cmd == 'irc') {
-          irc.say(data.msg);
+        if (data.cmd) {
+          switch(data.cmd) {
+            case "irc":
+              irc.say(data.msg);
+            break;
+            case "broadcast":
+              sendToOther(data.data);
+            break;
+          }
         }
       }
     });
-    workers++;
-  }
+  };
 
+  for(var i = 0; i < numberOfWorkers; i++) {
+    fork();
+  }
   cluster.on('death', function(worker) {
-    workers--;
+    var indx = workers.indexOf(worker);
+    if (indx > -1) {
+      workers.splice(indx, 1);
+    }
     console.log('worker ' + worker.pid + ' died. restarting in 1 second...');
     setTimeout(function(){
-      cluster.fork();
+      fork();
     }, 1);
   });
 

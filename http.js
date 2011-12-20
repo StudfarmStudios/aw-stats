@@ -21,6 +21,7 @@ function defineRoutesAndMiddleware(app) {
   app.get('/login', middlewares.pilot.login(true));
 
   app.error(function(err, req, res, next) {
+    console.log(err);
     var response = {error: err.message};
     if (err.data) {
       response.data = err.data;
