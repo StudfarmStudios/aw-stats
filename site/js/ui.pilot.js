@@ -42,7 +42,7 @@
   }
 
   function hoursToTime (hours) {
-    var minutes  = (hours % 1) * 60;
+    var minutes  = Math.floor((hours % 1) * 60);
     hours = Math.floor(hours);
     return hours + "h" + (minutes > 0 ? (" " + minutes + "min") : "");
   }
