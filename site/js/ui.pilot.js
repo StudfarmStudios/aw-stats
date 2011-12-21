@@ -15,6 +15,11 @@
         + '    <div class="row most-used-title-row"><div class="span3"><b>Ship</b></div><div class="span3"><b>Weapon</b></div><div class="span3"><b>Mod</b></div></div>'
         + '    <div class="row most-used-image-row"><div class="span3 ship-image"></div><div class="span3 weapon2-image"></div><div class="span3 device-image"></div></div>'
         + '    <div class="row most-used-text-row"><div class="span3 ship-text"></div><div class="span3 weapon2-text"></div><div class="span3 device-text"></div></div>'
+        + '    <br /><h2>Data</h2>'
+        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span6 kills">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Deaths</b></div><div class="span6 deaths">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Suicides</b></div><div class="span6 suicides">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Kills / Deaths</b></div><div class="span6 kdratio">Loading</div></div>'
         + '  </div>'
         + '  <div class="span4 well">'
         + '    <h3>Rankings</h3>'
@@ -53,6 +58,12 @@
       content.find('.lastSeen').html(pilot.lastSeen);
       content.find('.created').html(pilot.created);
       content.find('.playTime').html(roundNumber((pilot.playTime || 0),2) + " hrs");
+
+      content.find('.kills').html(pilot.kills && pilot.kills.total ? pilot.kills.total : 0);
+      content.find('.deaths').html(pilot.deaths && pilot.deaths.total ? pilot.deaths.total : 0);
+      content.find('.suicides').html(pilot.suicides && pilot.suicides.total ? pilot.suicides.total : 0);
+      content.find('.kdratio').html(roundNumber((pilot.kills && pilot.kills.total ? pilot.kills.total : 0) / (pilot.deaths && pilot.deaths.total ? pilot.deaths.total : 0), 2));
+
 
       for (var type in pilot.equipment) {
         var maxValue = 0;
