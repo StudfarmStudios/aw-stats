@@ -32,13 +32,19 @@
         + '</div>'
         + '';
 
-  function roundNumber(num, dec) {
+  function roundNumber (num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 	  return result;
   }
 
-  function capitaliseFirstLetter(string) {
+  function capitaliseFirstLetter (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function hoursToTime (hours) {
+    var hours = Math.floor(hours);
+    var minutes  = (hours % 1) * 60;
+    return hours + "h" + (minutes > 0 ? (" " + minutes + "min") : "");
   }
 
   var pilot = function (hash) {
@@ -57,7 +63,7 @@
       title.html(username + " <small>Score: "+(pilot.score || 0)+", Rating: " + (Math.round(pilot.rating || 1500)) + "</small>");
       content.find('.lastSeen').html(pilot.lastSeen);
       content.find('.created').html(pilot.created);
-      content.find('.playTime').html(roundNumber((pilot.playTime || 0),2) + " hrs");
+      content.find('.playTime').html(hoursToTime(pilot.playTime || 0));
 
       content.find('.kills').html(pilot.kills && pilot.kills.total ? pilot.kills.total : 0);
       content.find('.deaths').html(pilot.deaths && pilot.deaths.total ? pilot.deaths.total : 0);
