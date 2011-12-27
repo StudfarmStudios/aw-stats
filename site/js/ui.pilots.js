@@ -66,8 +66,8 @@
   }
 
   function constructRankings() {
-    window.aw.stats.pilots(1, 10, 'score', function (data) {
-      $.each(data.pilots, function (indx, pilot) {
+    window.aw.stats.pilots(1, 10, 'score', function (pilots) {
+      $.each(pilots, function (indx, pilot) {
         var pilotElement = $(pilotHtml);
         pilotElement.find('a').html(pilot.username);
         pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
@@ -75,8 +75,8 @@
         scoreList.append(pilotElement);
       });
     });
-    window.aw.stats.pilots(1, 10, 'rating', function (data) {
-      $.each(data.pilots, function (indx, pilot) {
+    window.aw.stats.pilots(1, 10, 'rating', function (pilots) {
+      $.each(pilots, function (indx, pilot) {
         var pilotElement = $(pilotHtml);
         pilotElement.find('a').html(pilot.username);
         pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);

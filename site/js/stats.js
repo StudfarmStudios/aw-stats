@@ -20,6 +20,51 @@
     });
   };
 
+  stats.rounds = function (page, limit, sort, callback) {
+    var key = 'round_' + page + '_' + limit + '_' + sort;
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/round/list', {page: page, limit:limit, sortBy:sort}, function (data) {
+      if (data.error == undefined) {
+        aw.cache.set(key, data, 60);
+      }
+
+      callback(data);
+    });
+  };
+
+  stats.round = function (id, callback) {
+    var key = 'round_' + id;
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/round/' + id, {}, function (data) {
+      if (data.error == undefined) {
+        aw.cache.set(key, data, 60);
+      }
+
+      callback(data);
+    });
+  };
+
+  stats.roundsForPilot = function (page, limit, sort, id, callback) {
+    var key = 'round_' + page + '_' + limit + '_' + sort + '_' + id;
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/round/list', {page: page, limit:limit, sortBy:sort, pilotId: id}, function (data) {
+      if (data.error == undefined) {
+        aw.cache.set(key, data, 60);
+      }
+
+      callback(data);
+    });
+  };
+
   stats.pilotById = function (id, callback) {
     var key = 'pilot_';
     var cachedData = aw.cache.get(key + id);
