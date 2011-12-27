@@ -21,10 +21,12 @@ client.on('join', function () {
 client.on('message', function (from, to, msg) {
   if (msg.indexOf('!aw') === 0) {
     var parts = msg.split(' ');
-    if (parts[0] != '!aw') {
+    var command = parts.shift();
+    if (command != '!aw') {
       return;
     }
-    var username = parts[1] || from;
+    
+    var username = (parts.length > 0) ? parts.join(' ') : from;
     pilotRepository.getPilotByUsername(username, function (err, pilot) {
       if (err) {
         exports.say(err.message);
