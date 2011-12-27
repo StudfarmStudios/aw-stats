@@ -12,12 +12,17 @@ function defineRoutesAndMiddleware(app) {
   app.enable("jsonp callback");
   app.use(express.static(__dirname + '/site'));
 // TODO SOME KIND OF TOKEN FOR ALL THE ROUTES
+
   app.get('/pilot/create', middlewares.pilot.create(true));
   app.get('/pilot/list', middlewares.pilot.list(true));
   app.get('/pilot/search', middlewares.pilot.search(true));
   app.get('/pilot/id/:id/rankings', middlewares.pilot.rankings(true));
   app.get('/pilot/id/:id', middlewares.pilot.loader(true));
   app.get('/pilot/:username', middlewares.pilot.loader(true));
+
+  app.get('/round/list', middlewares.round.list(true));
+  app.get('/round/:id', middlewares.round.loader(true));
+
   app.get('/login', middlewares.pilot.login(true));
 
   app.error(function(err, req, res, next) {
