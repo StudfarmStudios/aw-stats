@@ -70,7 +70,7 @@
 
   var rounds = function (hash) {
     var page = 1;
-    var limit = 30;
+    var limit = 15;
 
     content = $(contentHtml);
     $('.container .content').html(content);
