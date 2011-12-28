@@ -64,6 +64,21 @@ server.register(
 );
 
 server.register(
+    {$has : ['Fired', 'Type', 'Role']},
+    statsMiddlewares.position(),
+    statsMiddlewares.getPilot('Fired', '_pilot', true),
+    statsMiddlewares.commands.fired()
+);
+
+server.register(
+    {$has : ['Hit', 'Target']},
+    statsMiddlewares.position(),
+    statsMiddlewares.getPilot('HitOwner', '_sender', true),
+    statsMiddlewares.getPilot('TargetOwner', '_receiver', true),
+    statsMiddlewares.commands.hit()
+);
+
+server.register(
     {$has : ['Bonus', 'Player']},
     statsMiddlewares.position(),
     statsMiddlewares.getPilot('Player', '_pilot', true),
