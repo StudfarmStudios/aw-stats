@@ -11,7 +11,7 @@ program
   .version('0.0.1')
   .option('-t, --twitter', 'Use twitter')
   .option('-i, --irc', 'Use irc')
-  .option('-m, --message [message]', 'The message to be announced [foobar message]')
+  .option('-m, --message [message]', 'The message to be announced')
   .parse(process.argv);
 
 var useTwitter = program.twitter != undefined;
