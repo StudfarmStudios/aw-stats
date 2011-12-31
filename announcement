@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('commander');
+var net = require('net');
+
+program
+  .version('0.0.1')
+  .option('-t, --twitter', 'Use twitter')
+  .option('-i, --irc', 'Use irc')
+  .option('-m, --message [message]', 'The message to be announced [foobar message]')
+  .parse(process.argv);
+
+var useTwitter = program.twitter != undefined;
+var useIrc = program.irc != undefined;
+var message = program.message;
+
+if (!useTwitter && !useIrc) {
+    console.error("You should specify channel(s) for announcement");
+    return;
+}
+
+if (message == null) {
+    console.error("You should specify a message");
+    return;
+}
+
+var messages = [];
+
+if (useTwitter) {
+    messages.push("twitter|" + message);
+}
+
+if (useIrc) {
+    messages.push("irc|" + message);
+}
+
+
+
+var client = net.connect('announcement.sock', function() { //'connect' listener
+    client.write(messages.join('\r\n') + '\r\n');
+});
+
+var okCount = 0;
+function ok () {
+ okCount++;
+ if (okCount >= messages.length) {
+   console.log("SUCCESS");
+   client.end();
+ }
+}
+
+var buffer = "";
+function processBuffer() {
+  var index = -1;
+  while ((index = buffer.indexOf('\r\n')) > -1) {
+    var data = buffer.substring(0, index);
+    buffer = buffer.substring(index + '\r\n'.length);
+    if (data.indexOf('OK') > -1) {
+      ok();
+    }
+  }
+}
+
+client.on('data', function(data) {
+    buffer += data.toString();
+    processBuffer();
+});
