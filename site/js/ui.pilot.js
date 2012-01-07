@@ -85,7 +85,7 @@
           }
         }
 
-        content.find('.' + type + '-image').html('<img src="images/stats_'+maxName.toLowerCase()+'.png" />');
+        content.find('.' + type + '-image').html('<img src="images/stats_'+maxName.replace(/ /g, '_').toLowerCase()+'.png" />');
         content.find('.' + type + '-text').html("<b>"+capitaliseFirstLetter(maxName) + "</b><br/>(" + Math.round((maxValue / total) * 100) + "%)");
 
       }
