@@ -21,7 +21,22 @@ function defineRoutesAndMiddleware(app) {
   app.get('/pilot/:username', middlewares.pilot.loader(true));
 
   app.get('/round/list', middlewares.round.list(true));
-  app.get('/round/:id', middlewares.round.loader(true));
+
+  app.get('/round/:id', middlewares.round.loader(false), middlewares.round.kills(false), function (req, res, next) {
+    var round = req.round;
+    var kills = req.roundKills;
+    var i;
+    round.results.forEach(function (result) {
+      for (i = 0; kills.length; i++) {
+        if (kills[i]._id.toString() === result._id.toString()) {
+          result.killsByPilot = kills[i].value;
+          kills.splice(i,1);
+          break;
+        }
+      }
+    });
+    res.send(round);
+  });
 
   app.get('/login', middlewares.pilot.login(true));
 
