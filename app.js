@@ -8,6 +8,7 @@ if (numberOfWorkers > 4) {
 if (cluster.isMaster) {
   var announcementServer = require('./lib/announcementserver');
   var irc = require('./lib/irc');
+  var cron = require('./lib/cron');
   var workers = [];
   var fork = function () {
     var worker = cluster.fork();
