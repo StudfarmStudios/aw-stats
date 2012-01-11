@@ -1,6 +1,7 @@
 var express = require('express');
 var middlewares = require('./lib/middleware/http');
 var fs = require('fs');
+var geoip = require('connect-geoip').geoip;
 
 var options = {
   key: fs.readFileSync(__dirname + '/key.pem'),
@@ -12,6 +13,8 @@ function defineRoutesAndMiddleware(app) {
   app.enable("jsonp callback");
   app.use(express.static(__dirname + '/site'));
 // TODO SOME KIND OF TOKEN FOR ALL THE ROUTES
+
+  app.get('/feed', geoip(), middlewares.feed.feed())
 
   app.get('/ranking/top1', middlewares.ranking.top1(true));
 
