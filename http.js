@@ -13,6 +13,8 @@ function defineRoutesAndMiddleware(app) {
   app.use(express.static(__dirname + '/site'));
 // TODO SOME KIND OF TOKEN FOR ALL THE ROUTES
 
+  app.get('/ranking/top1', middlewares.ranking.top1(true));
+
   app.get('/server/list', middlewares.server.list(true));
 
   app.get('/pilot/create', middlewares.pilot.create(true));
