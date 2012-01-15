@@ -48,7 +48,7 @@
       var element = $(scoreHtml);
 
       element.find('.position').html(posPerScore[res.score] + '.');
-      element.find('.username').html('<a href="!#/pilot/' + res.username + '">' + res.username + '</a>');
+      element.find('.username').html('<a href="#!/pilot/' + res.username + '">' + res.username + '</a>');
       element.find('.kills').html(res.kills);
       element.find('.deaths').html(res.deaths);
       element.find('.suicides').html(res.suicides);
