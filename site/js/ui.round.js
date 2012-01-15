@@ -54,7 +54,7 @@
       element.find('.suicides').html(res.suicides);
       element.find('.score').html(res.score);
       var rDelta = Math.round(res.newRating - res.oldRating);
-      element.find('.rating').html( ((rDelta > 0)? " + " : " - ") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
+      element.find('.rating').html( ((rDelta > 0)? " + " : "") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
       scores.append(element);
     });
 
