@@ -15,6 +15,6 @@
      "commander" : "0.5.1",
      "http-get" : "0.3.12",
      "connect-geoip" : "0.0.2",
-     "natural" : "0.0.63"
+     "brain" : "0.3.6"
  }
 }
