@@ -46,15 +46,21 @@
 
     $.each(round.results, function (indx, res) {
       var element = $(scoreHtml);
+      if (res.anon) {
+        element.find('.username').html(res.username + ' <span class="label notice">Not registered</span>');
+      } else {
+        element.find('.username').html('<a href="#!/pilot/' + res.username + '">' + res.username + '</a>');
+        var rDelta = Math.round(res.newRating - res.oldRating);
+        element.find('.rating').html( ((rDelta >= 0)? " + " : "") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
+      }
 
-      element.find('.position').html(posPerScore[res.score] + '.');
-      element.find('.username').html('<a href="#!/pilot/' + res.username + '">' + res.username + '</a>');
-      element.find('.kills').html(res.kills);
-      element.find('.deaths').html(res.deaths);
-      element.find('.suicides').html(res.suicides);
-      element.find('.score').html(res.score);
-      var rDelta = Math.round(res.newRating - res.oldRating);
-      element.find('.rating').html( ((rDelta >= 0)? " + " : "") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
+        element.find('.position').html(posPerScore[res.score] + '.');
+        element.find('.kills').html(res.kills);
+        element.find('.deaths').html(res.deaths);
+        element.find('.suicides').html(res.suicides);
+        element.find('.score').html(res.score);
+
+
       scores.append(element);
     });
 
@@ -76,8 +82,12 @@
       if (i > 0) {
         winners += ', ';
       }
+      if (result.anon) {
+        winners += result.username + ' <span class="label notice">Not registered</span>';
+      } else {
+        winners += '<a href="#!/pilot/' + result.username + '">' + result.username + '</a>';
+      }
 
-      winners += '<a href="#!/pilot/' + result.username + '">' + result.username + '</a>';
     }
     content.find('.winner').html(winners);
   }

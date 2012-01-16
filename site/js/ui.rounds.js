@@ -66,7 +66,11 @@
             winners += ', ';
           }
 
-          winners += '<a href="#!/pilot/' + result.username + '">' + result.username + '</a>';
+          if (result.anon) {
+            winners += result.username + ' <span class="label notice">Not registered</span>';
+          } else {
+            winners += '<a href="#!/pilot/' + result.username + '">' + result.username + '</a>';
+          }
         }
         roundElement.find('.round-winner').html(winners + ' (<small>' + round.results[0].score + '</small>)');
         roundList.append(roundElement);
