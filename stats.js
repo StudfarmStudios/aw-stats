@@ -27,13 +27,15 @@ server.register(
 
 server.register(
     {AddPlayer: {$exists:true}},
-    statsMiddlewares.getPilot('AddPlayer.LoginToken', '_pilot'),
+    statsMiddlewares.getPilot('AddPlayer', '_pilot'),
+    //statsMiddlewares.getPilot('AddPlayer.LoginToken', '_pilot'),
     statsMiddlewares.commands.addPlayer()
 );
 
 server.register(
     {RemovePlayer: {$exists:true}},
-    statsMiddlewares.getPilot('RemovePlayer.LoginToken', '_pilot'),
+    statsMiddlewares.getPilot('RemovePlayer', '_pilot'),
+    //statsMiddlewares.getPilot('RemovePlayer.LoginToken', '_pilot'),
     statsMiddlewares.commands.removePlayer()
 );
 
