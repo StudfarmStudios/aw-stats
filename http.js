@@ -33,6 +33,13 @@ function defineRoutesAndMiddleware(app) {
 
   app.get('/login', middlewares.pilot.login(true));
 
+  app.get('/info', geoip(), function (req, res) {
+    var response = {};
+    response.geoip = req.geoip;
+    response.nativeClickOnce = req.headers['http_x_clickoncesupport'] || req.headers['x-clickoncesupport'] || false;
+    res.send(response);
+  });
+
   app.error(function(err, req, res, next) {
     console.log(err);
     var response = {error: err.message};
