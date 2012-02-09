@@ -5,6 +5,20 @@
     $.getJSON(this.url + path + "?callback=?", data, callback);
   };
 
+  stats.info = function (callback) {
+    var key = 'info';
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/info', {}, function (data) {
+      if (data.error == undefined) {
+        aw.cache.set(key, data, 6000);
+      }
+      callback(data);
+    });
+  };
+
   stats.pilots = function (page, limit, sort, callback) {
     var key = 'pilots_' + page + '_' + limit + '_' + sort;
     var cachedData = aw.cache.get(key);
