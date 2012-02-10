@@ -23,11 +23,11 @@
         + '  </div>'
         + '  <div class="span4 well">'
         + '    <h3>Rankings</h3>'
-        + '    <div class="row"><div class="span2"><b>Rating</b></div><div class="span2 rating-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span2 score-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span2 kills-total-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span2 wins-total-rank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span2 playTime-rank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Rating</b></div><div class="span2 ratingRank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span2 scoreRank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span2 killsTotalRank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span2 winsTotalRank">Loading</div></div>'
+        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span2 playTimeRank">Loading</div></div>'
         + '  </div>'
         + '</div>'
         + '';
@@ -104,7 +104,7 @@
           } else if (value == 2) {
             suffix = "nd";
           }
-          content.find('.' + type.replace('.', '-') + '-rank').html(value + suffix);
+          content.find('.' + type.replace('.', '-')).html(value + suffix);
         }
 
       })
