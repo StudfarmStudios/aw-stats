@@ -1,8 +1,27 @@
-<html>
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Assault Wing - Plugin test</title>
+    <script src="js/3rdparty/jquery.min.js"></script>
     <object id="awl" type="application/x-assaultwinglauncher" width="1" height="1"></object>
+    <script type="text/javascript">
+      $(function () {
+        if (navigator.mimeTypes ["application/x-assaultwinglauncher"]) {
+            $('#start').show();
+        } else {
+            $('#help').show();
+        }
+      });
+    </script>
 </head>
 <body>
-    <a href="javascript:void(0);" onclick="document.awl.start('');">Käynnistä</a>
+    <div id="start" style="display: none"><a href="javascript:void(0);" onclick="document.awl.start('');">Käynnistä</a></div>
+    <div id="help" style="display: none">
+        <h1>Plugin not installed</h1><br />
+        1. Get <a href="files/npAssaultWingLauncher.dll">npAssaultWingLauncher.dll</a> <br />
+        2. Register plugin  "<b>regsvr32 npAssaultWingLauncher.dll</b>" <br />
+        3. Restart your browser if this help is still shown after page refresh <br />
+    </div>
 </body>
 </html>
