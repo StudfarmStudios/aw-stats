@@ -7,7 +7,7 @@
     <object id="awl" type="application/x-assaultwinglauncher" width="1" height="1"></object>
     <script type="text/javascript">
       $(function () {
-        if (navigator.mimeTypes ["application/x-assaultwinglauncher"]) {
+        if (document.awl.start) {
             $('#start').show();
         } else {
             $('#help').show();
