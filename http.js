@@ -25,6 +25,7 @@ function defineRoutesAndMiddleware(app) {
   app.get('/pilot/search', middlewares.pilot.search(true));
   app.get('/pilot/id/:id/rankings', middlewares.pilot.rankings(true));
   app.get('/pilot/id/:id', middlewares.pilot.loader(true));
+  app.get('/pilot/token/:token', middlewares.pilot.loader(true));
   app.get('/pilot/:username', middlewares.pilot.loader(true));
 
   app.get('/round/list', middlewares.round.list(true));
