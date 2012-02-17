@@ -8,7 +8,7 @@
       + '<div class="page-header">'
       + '  <h1>Rounds <small></small></h1>'
       + '</div>'
-      + '<table>'
+      + '<table class="table">'
       + '  <thead><th>Arena</th><th>Started</th><th>Ended</th><th>Winner</th></thead>'
       + '  <tbody class="round-table"></tbody>'
       + '</table>'

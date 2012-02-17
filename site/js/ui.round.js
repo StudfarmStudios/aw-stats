@@ -14,7 +14,7 @@
         + '<div class="row"><div class="span2"><b>Ended</b></div><div class="span6 ended">Loading</div></div>'
         + '<div class="row"><div class="span2"><b>Winner(s)</b></div><div class="span6 winner">Loading</div></div>'
         + '<br /><h2>Results</h2>'
-        + '<table>'
+        + '<table class="table">'
         + '  <thead><th>Pos.</th><th>Pilot</th><th>Kills</th><th>Deaths</th><th>Suicides</th><th>Score</th><th>Rating</th></thead>'
         + '  <tbody class="result-table"></tbody>'
         + '</table>'

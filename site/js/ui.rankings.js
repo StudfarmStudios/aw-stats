@@ -11,7 +11,7 @@
         + '  <h1>Rankings <small></small></h1>'
         + '</div>'
         + '<div class="row">'
-        + '  <div class="span10">'
+        + '  <div class="span6">'
         + '    <h2>Scores (top 10)</h2>'
         + '    <ol class="score-list"></ol>'
         + '    <h2>Ratings (top 10)</h2>'
