@@ -9,6 +9,7 @@ if (cluster.isMaster) {
   var announcementServer = require('./lib/announcementserver');
   var irc = require('./lib/irc');
   var cron = require('./lib/cron');
+  var socketio = require('./lib/socketio');
   var workers = [];
   var fork = function () {
     var worker = cluster.fork();
@@ -29,6 +30,9 @@ if (cluster.isMaster) {
           switch(data.cmd) {
             case "irc":
               irc.say(data.msg);
+            break;
+            case "socketio":
+              socketio.process(data);
             break;
             case "broadcast":
               sendToOther(data.data);

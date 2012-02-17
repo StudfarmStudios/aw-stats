@@ -15,6 +15,7 @@
      "commander" : "0.5.1",
      "http-get" : "0.3.12",
      "connect-geoip" : "0.0.2",
-     "brain" : "0.3.6"
+     "brain" : "0.3.6",
+     "socket.io" : "0.8.7"
  }
 }

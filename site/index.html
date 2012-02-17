@@ -10,9 +10,10 @@
     <!--[if lt IE 9]>
       <script src="js/3rdparty/html5.js"></script>
     <![endif]-->
-
     <script src="js/3rdparty/jquery.min.js"></script>
     <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
+    <script src="http://www.assaultwing.com:3003/socket.io/socket.io.min.js"></script>
+    <script src="js/communication.js?_=1"></script>
     <script src="js/cache.js?_=1"></script>
     <script src="js/stats.js?_=1"></script>
     <script src="js/ui.rankings.js?_=1"></script>
@@ -31,9 +32,9 @@
           var parts = hash.split('/');
           var view = parts[1];
           if (window.aw.ui[view] && typeof window.aw.ui[view] === 'function') {
-            window.aw.ui[view](hash);
+            window.currentView = window.aw.ui[view](hash);
           } else {
-            window.aw.ui.notfound(hash);
+            window.currentView = window.aw.ui.notfound(hash);
           }
         }
         $(window).hashchange(processHash);
