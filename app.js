@@ -57,6 +57,10 @@ if (cluster.isMaster) {
     }, 1);
   });
 
+  process.on('uncaughtException', function(err) {
+    console.error(JSON.stringify(err));
+  });
+
 } else {
   console.log("Worker started " + process.pid);
   require('./http.js');
