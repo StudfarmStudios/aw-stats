@@ -4,7 +4,8 @@
       pilotList,
       showMorePilots,
       scoreList,
-      ratingList;
+      ratingList,
+      serverList;
 
   var contentHtml = ''
         + '<div class="page-header">'
@@ -12,6 +13,11 @@
         + '</div>'
         + '<div class="row">'
         + '  <div class="span6">'
+        + '    <h2>Servers</h2>'
+        + '    <table class="table">'
+        + '      <thead><th>Name</th><th>Current</th><th>Limit</th></thead>'
+        + '      <tbody class="server-table"></tbody>'
+        + '    </table>'
         + '    <h2>Scores (top 10)</h2>'
         + '    <ol class="score-list"></ol>'
         + '    <h2>Ratings (top 10)</h2>'
@@ -26,6 +32,13 @@
 
   var pilotHtml = ''
         + '<li class="pilot"><a href="#"></a> <small class="score"></small></li>';
+
+  var serverHtml = ''
+        + '<tr>'
+        + '  <td class="server-name"></td>'
+        + '  <td class="server-current"></td>'
+        + '  <td class="server-limit"></td>'
+        + '</tr>';
 
   function roundNumber(num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
@@ -86,11 +99,24 @@
     });
   }
 
+  function constructServerList() {
+    window.aw.stats.api('/server/list', {}, function (servers) {
+      $.each(servers, function (indx, server) {
+        var serverElement = $(serverHtml);
+        serverElement.find('.server-name').html(server.name);
+        serverElement.find('.server-current').html(server.currentclients);
+        serverElement.find('.server-limit').html(server.maxclients);
+        serverList.append(serverElement);
+      })
+    });
+  }
+
   var rankings = function () {
     content = $(contentHtml);
     pilotList = content.find('.pilot-list');
     showMorePilots = content.find('.more-pilots');
     scoreList = content.find('.score-list');
+    serverList = content.find('.server-table');
     ratingList = content.find('.rating-list');
     $('.container .content').html(content);
     $('.nav li').removeClass('active');
@@ -98,6 +124,7 @@
 
     constructPilotList();
     constructRankings();
+    constructServerList();
   };
 
   if (window.aw == undefined) {
