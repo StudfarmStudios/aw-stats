@@ -53,7 +53,11 @@
       createPagination(data.page, data.limit, data.total, search);
       $.each(data.pilots, function (indx, pilot) {
         var pilotElement = $(pilotHtml);
-        pilotElement.find('.pilot-name').html('<a href="#!/pilot/' + pilot.username + '">' + pilot.username + '</a>');
+        var username = pilot.username;
+        if (search && search !=  "") {
+          username = username.replace(new RegExp(search, 'g'), "<b>" + search + "</b>");
+        }
+        pilotElement.find('.pilot-name').html('<a href="#!/pilot/' + pilot.username + '">' + username + '</a>');
         pilotElement.find('.pilot-rating').html(Math.round(pilot.rating || 1500));
         pilotElement.find('.pilot-score').html(pilot.score);
         pilotElement.find('.pilot-flight-time').html(hoursToTime(pilot.playTime || 0));
