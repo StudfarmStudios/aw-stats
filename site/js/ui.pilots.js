@@ -4,18 +4,9 @@
       pilotList,
       pagination;
 
-  var contentHtml = ''
-      + '<div class="page-header">'
-      + '  <h1>Pilots <small></small></h1>'
-      + '</div>'
-      + '<table class="table">'
-      + '  <thead><th>Name</th></thead>'
-      + '  <tbody class="pilot-table"></tbody>'
-      + '</table>'
-      + '<div class="pagination"><ul></ul></div>';
+  var contentHtml = document.getElementById('pilots-content-template').innerHTML;
 
-  var pilotHtml = ''
-      + '<tr><td class="pilot-name"></td></td></tr>';
+  var pilotHtml = document.getElementById('pilots-pilot-template').innerHTML;
 
 
   function createPageLink(page, limit, total) {

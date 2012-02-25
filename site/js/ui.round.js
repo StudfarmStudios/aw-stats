@@ -5,32 +5,8 @@
       round,
       scores;
 
-  var contentHtml = ''
-        + '<div class="page-header">'
-        + '  <h1></h1>'
-        + '</div>'
-        + '<div class="row"><div class="span2"><b>Arena</b></div><div class="span6 arena">Loading</div></div>'
-        + '<div class="row"><div class="span2"><b>Started</b></div><div class="span6 started">Loading</div></div>'
-        + '<div class="row"><div class="span2"><b>Ended</b></div><div class="span6 ended">Loading</div></div>'
-        + '<div class="row"><div class="span2"><b>Winner(s)</b></div><div class="span6 winner">Loading</div></div>'
-        + '<br /><h2>Results</h2>'
-        + '<table class="table">'
-        + '  <thead><th>Pos.</th><th>Pilot</th><th>Kills</th><th>Deaths</th><th>Suicides</th><th>Score</th><th>Rating</th></thead>'
-        + '  <tbody class="result-table"></tbody>'
-        + '</table>'
-
-      ;
-
-  var scoreHtml = ''
-        + '<tr>'
-        + '  <td class="position"></td>'
-        + '  <td class="username"></td>'
-        + '  <td class="kills"></td>'
-        + '  <td class="deaths"></td>'
-        + '  <td class="suicides"></td>'
-        + '  <td class="score"></td>'
-        + '  <td class="rating"></td>'
-        + '</tr>';
+  var contentHtml = document.getElementById('round-content-template').innerHTML;
+  var scoreHtml = document.getElementById('round-score-template').innerHTML;
 
   function constructRoundScoreList () {
     var posPerScore = {};

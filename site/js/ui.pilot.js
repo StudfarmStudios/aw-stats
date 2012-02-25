@@ -2,35 +2,7 @@
 
   var username, content, title;
 
-  var contentHtml = ''
-        + '<div class="page-header">'
-        + '  <h1></h1>'
-        + '</div>'
-        + '<div class="row">'
-        + '  <div class="span7">'
-        + '    <div class="row"><div class="span2"><b>Last played</b></div><div class="span3 lastSeen">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Registered</b></div><div class="span3 created">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Flight hours</b></div><div class="span3 playTime">Loading</div></div>'
-        + '    <br /><h2>Most used</h2>'
-        + '    <div class="row most-used-title-row"><div class="span2"><b>Ship</b></div><div class="span2"><b>Weapon</b></div><div class="span2"><b>Mod</b></div></div>'
-        + '    <div class="row most-used-image-row"><div class="span2 ship-image"></div><div class="span2 weapon2-image"></div><div class="span2 device-image"></div></div>'
-        + '    <div class="row most-used-text-row"><div class="span2 ship-text"></div><div class="span2 weapon2-text"></div><div class="span2 device-text"></div></div>'
-        + '    <br /><h2>Data</h2>'
-        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span3 kills">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Deaths</b></div><div class="span3 deaths">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Suicides</b></div><div class="span3 suicides">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Kills / Deaths</b></div><div class="span3 kdratio">Loading</div></div>'
-        + '  </div>'
-        + '  <div class="span3 well">'
-        + '    <h3>Rankings</h3>'
-        + '    <div class="row"><div class="span2"><b>Rating</b></div><div class="span1 ratingRank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Score</b></div><div class="span1 scoreRank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Kills</b></div><div class="span1 killsTotalRank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Victories</b></div><div class="span1 winsTotalRank">Loading</div></div>'
-        + '    <div class="row"><div class="span2"><b>Flight time</b></div><div class="span1 playTimeRank">Loading</div></div>'
-        + '  </div>'
-        + '</div>'
-        + '';
+  var contentHtml = document.getElementById('pilot-content-template').innerHTML;
 
   function roundNumber (num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);

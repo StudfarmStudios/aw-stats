@@ -1,9 +1,6 @@
 (function (window) {
 
-  var contentHtml = ''
-        + '<div class="page-header">'
-        + '  <h1>Page not found <small></small></h1>'
-        + '</div>';
+  var contentHtml = document.getElementById('notfound-content-template').innerHTML;
 
 
   var notfound = function (hash) {

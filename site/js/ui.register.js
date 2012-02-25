@@ -3,57 +3,10 @@
   var content,
       form;
 
-  var contentHtml = ''
-        + '<div class="page-header">'
-        + '  <h1>Register your pilot <small></small></h1>'
-        + '</div>'
-        + '<div class="errors"></div>'
-        + '<form class="form-horizontal">'
-        + ' <fieldset>'
-        + '   <legend>Fill in your pilots information</legend>'
-        + '   <div class="control-group">'
-        + '     <label class="control-label" for="pilot-username">Username</label>'
-        + '     <div class="controls">'
-        + '       <input class="input-xlarge" id="pilot-username" name="username" size="30" type="text">'
-        + '     </div>'
-        + '   </div>'
-        + '   <div class="control-group">'
-        + '     <label class="control-label" for="pilot-email">Email</label>'
-        + '     <div class="controls">'
-        + '       <input class="input-xlarge" id="pilot-email" name="email" size="30" type="text">'
-        + '     </div>'
-        + '   </div>'
-        + '   <div class="control-group">'
-        + '     <label class="control-label" for="pilot-password1">Password</label>'
-        + '     <div class="controls">'
-        + '       <input class="input-xlarge" id="pilot-password1" name="password1" size="30" type="password">'
-        + '     </div>'
-        + '   </div>'
-        + '   <div class="control-group">'
-        + '     <label class="control-label" for="pilot-password2">Confirm password</label>'
-        + '     <div class="controls">'
-        + '       <input class="input-xlarge" id="pilot-password2" name="password2" size="30" type="password">'
-        + '     </div>'
-        + '   </div>'
-        + '   <div class="form-actions">'
-        + '     <input type="submit" class="btn btn-primary" value="Register">'
-        + '   </div>'
-        + ' </fieldset>'
-        + '</form>';
-
-  var thankYouContentHtml =  ''
-        + '<div class="page-header">'
-        + '  <h1>Thanks for registering your pilot!<small></small></h1>'
-        + '</div>'
-        + 'Your pilot is now registered and can be use to login from Assault Wing client and gain statistics on the official servers';
-  var errorHtml = ''
-        +  '<div class="alert alert-error">'
-        +  '<p style="padding-top: 10px"><strong>Error! </strong></p>'
-        + '</div>';
-
-
-
-
+  var contentHtml = document.getElementById('register-content-template').innerHTML;
+  var thankYouContentHtml =  document.getElementById('register-thank-you-template').innerHTML;
+  var errorHtml = document.getElementById('register-error-template').innerHTML;
+  
   var register = function () {
     content = $(contentHtml);
     $('.container .content').html(content);

@@ -7,38 +7,9 @@
       ratingList,
       serverList;
 
-  var contentHtml = ''
-        + '<div class="page-header">'
-        + '  <h1>Battlefront Summary <small></small></h1>'
-        + '</div>'
-        + '<div class="row">'
-        + '  <div class="span6">'
-        + '    <h2>Servers</h2>'
-        + '    <table class="table">'
-        + '      <thead><th>Name</th><th>Current</th><th>Limit</th></thead>'
-        + '      <tbody class="server-table"></tbody>'
-        + '    </table>'
-        + '    <h2>Scores (top 10)</h2>'
-        + '    <ol class="score-list"></ol>'
-        + '    <h2>Ratings (top 10)</h2>'
-        + '    <ol class="rating-list"></ol>'
-        + '  </div>'
-        + '  <div class="span4">'
-        + '    <h3>Newest pilots</h3>'
-        + '    <ul class="pilot-list"></ul>'
-        + '    <a class="more-pilots btn" href="#">Show more</a>'
-        + '  </div>'
-        + '</div>';
-
-  var pilotHtml = ''
-        + '<li class="pilot"><a href="#"></a> <small class="score"></small></li>';
-
-  var serverHtml = ''
-        + '<tr>'
-        + '  <td class="server-name"></td>'
-        + '  <td class="server-current"></td>'
-        + '  <td class="server-limit"></td>'
-        + '</tr>';
+  var contentHtml = document.getElementById('summary-content-template').innerHTML;
+  var pilotHtml = document.getElementById('summary-pilot-template').innerHTML;
+  var serverHtml = document.getElementById('summary-server-template').innerHTML;
 
   function roundNumber(num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);

@@ -4,18 +4,9 @@
       roundList,
       pagination;
 
-  var contentHtml = ''
-      + '<div class="page-header">'
-      + '  <h1>Rounds <small></small></h1>'
-      + '</div>'
-      + '<table class="table">'
-      + '  <thead><th>Arena</th><th>Started</th><th>Ended</th><th>Winner</th></thead>'
-      + '  <tbody class="round-table"></tbody>'
-      + '</table>'
-      + '<div class="pagination"><ul></ul></div>';
+  var contentHtml = document.getElementById('rounds-content-template').innerHTML;
 
-  var roundHtml = ''
-      + '<tr><td class="round-arena"></td><td class="round-started"></td><td class="round-ended"></td><td class="round-winner"></td></tr>';
+  var roundHtml = document.getElementById('rounds-round-template').innerHTML;
 
 
   function createPageLink(page, limit, total) {
