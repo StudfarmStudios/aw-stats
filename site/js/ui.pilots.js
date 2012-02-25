@@ -56,6 +56,7 @@
 
   function initSearchForm (page, limit, search) {
     searchForm.find('input').val(search);
+    searchForm.find('input').focus();
     searchForm.submit(function() {
       var values = $(this).serializeArray();
       var valuesObject = {};
