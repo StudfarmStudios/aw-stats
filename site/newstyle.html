@@ -6,6 +6,43 @@
 <meta name="description" content="">
 <meta name="author" content="Jaakko Lukkari">
 
+<script id="login-modal-template" type="text/template">
+    <div class="modal fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+
+            <h3>Login</h3>
+        </div>
+
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="login-username">Username</label>
+
+                        <div class="controls">
+                            <input class="input-xlarge" id="login-username" name="username" size="30" type="text"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="login-password">Password</label>
+
+                        <div class="controls">
+                            <input class="input-xlarge" id="login-password" name="password" size="30"
+                                   type="password"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary">Login</a>
+            <a href="#" class="btn">Close</a>
+        </div>
+
+    </div>
+</script>
 
 <script id="notfound-content-template" type="text/template">
     <div class="page-header">
@@ -326,10 +363,12 @@
 <script src="js/3rdparty/html5.js"></script>
 <![endif]-->
 <script src="js/3rdparty/jquery.min.js"></script>
+<script src="js/3rdparty/bootstrap.min.js"></script>
 <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
 <script src="http://www.assaultwing.com:3003/socket.io/socket.io.js"></script>
 <script src="js/cache.js?_=11"></script>
 <script src="js/stats.js?_=11"></script>
+<script src="js/ui.login.js?_=11"></script>
 <script src="js/ui.summary.js?_=11"></script>
 <script src="js/ui.register.js?_=11"></script>
 <script src="js/ui.rounds.js?_=11"></script>
@@ -355,6 +394,18 @@
 
         $(window).hashchange(processHash);
         processHash();
+
+        $(function () {
+            if (window.loginToken) {
+                console.log("Logged in");
+            } else {
+                $('.login').click(function () {
+                    window.aw.ui.login.dialog();
+                    return false;
+                });
+            }
+        });
+
     });
 </script>
 
@@ -448,6 +499,7 @@
                 <li class="rounds"><a href="#!/rounds">Rounds</a></li>
                 <li class="register"><a href="#!/register">Register your pilot</a></li>
             </ul>
+            <p class="navbar-text pull-right login-status"><a href="" class="login">Login</a></p>
         </div>
     </div>
 </div>
