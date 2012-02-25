@@ -56,7 +56,7 @@
         pilotElement.find('.pilot-name').html('<a href="#!/pilot/' + pilot.username + '">' + pilot.username + '</a>');
         pilotElement.find('.pilot-rating').html(Math.round(pilot.rating || 1500));
         pilotElement.find('.pilot-score').html(pilot.score);
-        pilotElement.find('.pilot-flight-time').html(hoursToTime(pilot.playTime));
+        pilotElement.find('.pilot-flight-time').html(hoursToTime(pilot.playTime || 0));
 
         pilotList.append(pilotElement);
       });
