@@ -34,6 +34,21 @@
     });
   };
 
+  stats.pilotsSearch = function (page, limit, sort, search, callback) {
+    var key = 'pilots_' + page + '_' + limit + '_' + sort + '_' + search;
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/pilot/search', {page: page, limit:limit, sortBy:sort, search: search}, function (data) {
+      if (data.error == undefined) {
+        aw.cache.set(key, data, 60);
+      }
+
+      callback(data);
+    });
+  };
+
   stats.rounds = function (page, limit, sort, callback) {
     var key = 'round_' + page + '_' + limit + '_' + sort;
     var cachedData = aw.cache.get(key);

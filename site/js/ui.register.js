@@ -16,7 +16,7 @@
 
     form.submit(function() {
       var values = $(this).serializeArray();
-      var valuesObject = {};;
+      var valuesObject = {};
       for (var i = 0; i < values.length; i++) {
         var value = values[i];
         valuesObject[value.name] = value.value;
