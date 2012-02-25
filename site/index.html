@@ -13,20 +13,21 @@
     <script src="js/3rdparty/jquery.min.js"></script>
     <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
     <script src="http://www.assaultwing.com:3003/socket.io/socket.io.js"></script>
-    <script src="js/cache.js?_=1"></script>
-    <script src="js/stats.js?_=1"></script>
-    <script src="js/ui.rankings.js?_=4"></script>
-    <script src="js/ui.register.js?_=1"></script>
-    <script src="js/ui.rounds.js?_=3"></script>
-    <script src="js/ui.round.js?_=3"></script>
-    <script src="js/ui.pilot.js?_=3"></script>
-    <script src="js/ui.notfound.js?_=1"></script>
+    <script src="js/cache.js?_=2"></script>
+    <script src="js/stats.js?_=2"></script>
+    <script src="js/ui.summary.js?_=5"></script>
+    <script src="js/ui.register.js?_=6"></script>
+    <script src="js/ui.rounds.js?_=6"></script>
+    <script src="js/ui.round.js?_=6"></script>
+    <script src="js/ui.pilots.js?_=6"></script>
+    <script src="js/ui.pilot.js?_=6"></script>
+    <script src="js/ui.notfound.js?_=6"></script>
     <script type="text/javascript">
       $(function () {
         function processHash() {
-          var hash = window.location.hash || "#!/rankings";
+          var hash = window.location.hash || "#!/summary";
           if (hash == "#" || hash == "#!" || hash == "#!/") {
-            hash = "#!/rankings";
+            hash = "#!/summary";
           }
           var parts = hash.split('/');
           var view = parts[1];
@@ -116,7 +117,8 @@
           </a>
           <a class="brand" href="#">Assault Wing - Statistics</a>
           <ul class="nav">
-            <li class="rankings" class="active"><a href="#!/rankings">Rankings</a></li>
+            <li class="rankings" class="active"><a href="#!/summary">Summary</a></li>
+            <li class="pilots"><a href="#!/pilots">Pilots</a></li>
             <li class="rounds"><a href="#!/rounds">Rounds</a></li>
             <li class="register"><a href="#!/register">Register your pilot</a></li>
           </ul>

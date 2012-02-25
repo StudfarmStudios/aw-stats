@@ -9,7 +9,7 @@
 
   var contentHtml = ''
         + '<div class="page-header">'
-        + '  <h1>Rankings <small></small></h1>'
+        + '  <h1>Battlefront Summary <small></small></h1>'
         + '</div>'
         + '<div class="row">'
         + '  <div class="span6">'
@@ -24,7 +24,7 @@
         + '    <ol class="rating-list"></ol>'
         + '  </div>'
         + '  <div class="span4">'
-        + '    <h3>Pilots</h3>'
+        + '    <h3>Newest pilots</h3>'
         + '    <ul class="pilot-list"></ul>'
         + '    <a class="more-pilots btn" href="#">Show more</a>'
         + '  </div>'
@@ -50,7 +50,7 @@
     var limit = 15;
     function loadMorePilots() {
       page++;
-      window.aw.stats.pilots(page, limit, 'username', function (data) {
+      window.aw.stats.pilots(page, limit, 'created', function (data) {
         if (data.pilots.length < limit) {
           showMorePilots.hide();
           setTimeout(function () {
@@ -111,7 +111,7 @@
     });
   }
 
-  var rankings = function () {
+  var summary = function () {
     content = $(contentHtml);
     pilotList = content.find('.pilot-list');
     showMorePilots = content.find('.more-pilots');
@@ -135,5 +135,5 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.rankings = rankings;
+  window.aw.ui.summary = summary;
 })(window);

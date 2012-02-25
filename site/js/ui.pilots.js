@@ -2,102 +2,80 @@
 
   var content,
       pilotList,
-      showMorePilots,
-      scoreList,
-      ratingList;
+      pagination;
 
   var contentHtml = ''
-        + '<div class="page-header">'
-        + '  <h1>Rankings <small></small></h1>'
-        + '</div>'
-        + '<div class="row">'
-        + '  <div class="span10">'
-        + '    <h2>Scores (top 10)</h2>'
-        + '    <ol class="score-list"></ol>'
-        + '    <h2>Ratings (top 10)</h2>'
-        + '    <ol class="rating-list"></ol>'
-        + '  </div>'
-        + '  <div class="span4">'
-        + '    <h3>Pilots</h3>'
-        + '    <ul class="pilot-list"></ul>'
-        + '    <a class="more-pilots btn" href="#">Show more</a>'
-        + '  </div>'
-        + '</div>';
+      + '<div class="page-header">'
+      + '  <h1>Pilots <small></small></h1>'
+      + '</div>'
+      + '<table class="table">'
+      + '  <thead><th>Name</th></thead>'
+      + '  <tbody class="pilot-table"></tbody>'
+      + '</table>'
+      + '<div class="pagination"><ul></ul></div>';
 
   var pilotHtml = ''
-        + '<li class="pilot"><a href="#"></a> <small class="score"></small></li>';
+      + '<tr><td class="pilot-name"></td></td></tr>';
 
-  function roundNumber(num, dec) {
-	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
-	  return result;
-  }
 
-  function constructPilotList() {
-    var page = 0;
-    var limit = 15;
-    function loadMorePilots() {
-      page++;
-      window.aw.stats.pilots(page, limit, 'username', function (data) {
-        if (data.pilots.length < limit) {
-          showMorePilots.hide();
-          setTimeout(function () {
-            showMorePilots.show();
-          }, 60 * 1000 * 5);
-        } else {
-          showMorePilots.show();
-        }
-
-        $.each(data.pilots, function (indx, pilot) {
-          var pilotElement = $(pilotHtml);
-          pilotElement.find('a').html(pilot.username);
-          pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-          pilotElement.find('.score').html('('+(pilot.score ? pilot.score : 0)+')');
-          pilotList.append(pilotElement);
-        });
-      });
+  function createPageLink(page, limit, total) {
+    if (page == 0) {
+      return "#!/pilots/1/" + limit
     }
 
-    loadMorePilots();
+    return "#!/pilots/" + page + "/" + limit;
+  }
 
-    showMorePilots.click(function () {
-      loadMorePilots();
-      return false;
+  function createPagination(page, limit, total) {
+    pagination.empty();
+    var previous = $('<li class="prev' + ( (page == 1) ? ' disabled' : '' ) + '"><a href="' + createPageLink(page - 1, limit, total) + '">&larr; Previous</a></li>');
+    pagination.append(previous);
+    var totalPages = Math.ceil(total / limit);
+    var i;
+    for (i = 1; i <= totalPages; i++) {
+      (function (p) {
+        var pageButton = $('<li><a href="' + createPageLink(p, limit, total) + '">' + p + '</a></li>');
+        if (p == page) {
+          pageButton.addClass('active');
+        }
+        pagination.append(pageButton);
+      })(i);
+    }
+
+    var next = $('<li class="next' + ( (page * limit >= total) ? ' disabled' : '' ) + '"><a href="' + ( (page * limit >= total) ? createPageLink(page + 1, limit, total) : window.location.hash ) + '">Next &rarr;</a></li>');
+    pagination.append(next);
+  }
+
+  function constructPilotList(page, limit) {
+    window.aw.stats.pilots(page, limit, 'username', function (data) {
+      createPagination(data.page, data.limit, data.total);
+      $.each(data.pilots, function (indx, pilot) {
+        var pilotElement = $(pilotHtml);
+        pilotElement.find('.pilot-name').html('<a href="#!/pilot/' + pilot.username + '">' + pilot.username + '</a>');
+        pilotList.append(pilotElement);
+      });
     });
   }
 
-  function constructRankings() {
-    window.aw.stats.pilots(1, 10, 'score', function (pilots) {
-      $.each(pilots, function (indx, pilot) {
-        var pilotElement = $(pilotHtml);
-        pilotElement.find('a').html(pilot.username);
-        pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-        pilotElement.find('.score').html('('+(pilot.score ? pilot.score : 0)+')');
-        scoreList.append(pilotElement);
-      });
-    });
-    window.aw.stats.pilots(1, 10, 'rating', function (pilots) {
-      $.each(pilots, function (indx, pilot) {
-        var pilotElement = $(pilotHtml);
-        pilotElement.find('a').html(pilot.username);
-        pilotElement.find('a').attr("href", "#!/pilot/" + pilot.username);
-        pilotElement.find('.score').html('('+roundNumber((pilot.rating ? pilot.rating : 1500),2)+')');
-        ratingList.append(pilotElement);
-      });
-    });
-  }
+  var pilots = function (hash) {
+    var page = 1;
+    var limit = 15;
 
-  var rankings = function () {
     content = $(contentHtml);
-    pilotList = content.find('.pilot-list');
-    showMorePilots = content.find('.more-pilots');
-    scoreList = content.find('.score-list');
-    ratingList = content.find('.rating-list');
     $('.container .content').html(content);
-    $('.nav li').removeClass('active');
-    $('.nav .rankings').addClass('active');
+    pilotList = content.find('.pilot-table');
+    pagination = content.find('ul');
 
-    constructPilotList();
-    constructRankings();
+    $('.nav li').removeClass('active');
+    $('.nav .pilots').addClass('active');
+
+
+    var parts = hash.split('/');
+    page = parts[2] || page;
+    limit = parts[3] || limit;
+
+    constructPilotList(Number(page), Number(limit));
+
   };
 
   if (window.aw == undefined) {
@@ -108,5 +86,5 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.rankings = rankings;
+  window.aw.ui.pilots = pilots;
 })(window);
