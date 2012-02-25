@@ -9,6 +9,16 @@
 
   var pilotHtml = document.getElementById('pilots-pilot-template').innerHTML;
 
+  function roundNumber (num, dec) {
+	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	  return result;
+  }
+
+  function hoursToTime (hours) {
+    var minutes  = Math.floor((hours % 1) * 60);
+    hours = Math.floor(hours);
+    return hours + "h" + (minutes > 0 ? (" " + minutes + "min") : "");
+  }
 
   function createPageLink(page, limit, total, search) {
     if (page == 0) {
@@ -44,6 +54,10 @@
       $.each(data.pilots, function (indx, pilot) {
         var pilotElement = $(pilotHtml);
         pilotElement.find('.pilot-name').html('<a href="#!/pilot/' + pilot.username + '">' + pilot.username + '</a>');
+        pilotElement.find('.pilot-rating').html(Math.round(pilot.rating || 1500));
+        pilotElement.find('.pilot-score').html(pilot.score);
+        pilotElement.find('.pilot-flight-time').html(hoursToTime(pilot.playTime));
+
         pilotList.append(pilotElement);
       });
     };

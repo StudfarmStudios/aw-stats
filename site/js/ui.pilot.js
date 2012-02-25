@@ -4,13 +4,13 @@
 
   var contentHtml = document.getElementById('pilot-content-template').innerHTML;
 
+  function capitaliseFirstLetter (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   function roundNumber (num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 	  return result;
-  }
-
-  function capitaliseFirstLetter (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   function hoursToTime (hours) {
