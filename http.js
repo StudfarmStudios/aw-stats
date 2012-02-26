@@ -19,6 +19,7 @@ function defineRoutesAndMiddleware(app) {
   app.get('/ranking/top1', middlewares.ranking.top1(true));
 
   app.get('/server/list', middlewares.server.list(true));
+  app.get('/server/:id/join', middlewares.server.join(true));
 
   app.get('/pilot/create', middlewares.pilot.create(true));
   app.get('/pilot/list', middlewares.pilot.list(true));
