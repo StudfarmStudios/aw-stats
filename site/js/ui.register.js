@@ -8,7 +8,6 @@
   var errorHtml = document.getElementById('register-error-template').innerHTML;
 
   var register = function () {
-    if (content == null) {
       content = $(contentHtml);
       $('.container .content').html(content);
       form = $('.container .content form');
@@ -41,12 +40,6 @@
             });
         return false;
       });
-    } else {
-      $('.container .content').html(content);
-    }
-
-
-
   };
 
   if (window.aw == undefined) {
