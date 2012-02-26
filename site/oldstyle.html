@@ -6,44 +6,6 @@
 <meta name="description" content="">
 <meta name="author" content="Jaakko Lukkari">
 
-<script id="login-modal-template" type="text/template">
-    <div class="modal fade">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-
-            <h3>Login</h3>
-        </div>
-
-        <div class="modal-body">
-            <form class="form-horizontal">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="login-username">Username</label>
-
-                        <div class="controls">
-                            <input class="input-xlarge" id="login-username" name="username" size="30" type="text"/>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="login-password">Password</label>
-
-                        <div class="controls">
-                            <input class="input-xlarge" id="login-password" name="password" size="30"
-                                   type="password"/>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-            If you haven't registered a pilot do it <a class="register-link close-login-modal" href="#!/register">here</a>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-success">Login</a>
-            <a href="#" class="btn btn-danger close-login-modal">Close</a>
-        </div>
-
-    </div>
-</script>
 
 <script id="notfound-content-template" type="text/template">
     <div class="page-header">
@@ -145,8 +107,8 @@
         </h1>
     </div>
     <form class="well form-search pilots-search">
-        <button type="submit" class="btn btn-warning pull-right">Search</button>
-        <input type="text" class="input-medium search-query pull-right" name="search">
+        <input type="text" class="input-medium search-query" name="search">
+        <button type="submit" class="btn">Search</button>
     </form>
     <table class="table">
         <thead>
@@ -212,7 +174,7 @@
                 </div>
             </div>
             <div class="form-actions">
-                <input type="submit" class="btn btn-warning" value="Register"/>
+                <input type="submit" class="btn btn-primary" value="Register"/>
             </div>
         </fieldset>
     </form>
@@ -364,12 +326,10 @@
 <script src="js/3rdparty/html5.js"></script>
 <![endif]-->
 <script src="js/3rdparty/jquery.min.js"></script>
-<script src="js/3rdparty/bootstrap.min.js"></script>
 <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
 <script src="http://www.assaultwing.com:3003/socket.io/socket.io.js"></script>
 <script src="js/cache.js?_=11"></script>
 <script src="js/stats.js?_=11"></script>
-<script src="js/ui.login.js?_=11"></script>
 <script src="js/ui.summary.js?_=11"></script>
 <script src="js/ui.register.js?_=11"></script>
 <script src="js/ui.rounds.js?_=11"></script>
@@ -395,39 +355,18 @@
 
         $(window).hashchange(processHash);
         processHash();
-
-        $(function () {
-            if (window.loginToken) {
-                console.log("Logged in");
-            } else {
-                $('.login').click(function () {
-                    window.aw.ui.login.dialog();
-                    return false;
-                });
-            }
-        });
-
     });
 </script>
 
+
+
 <!-- Le styles -->
 <link rel="stylesheet" href="css/bootstrap.min.css?_=1">
-<link rel="stylesheet" href="css/darkstrap.css?_=1">
 <link rel="stylesheet" href="css/aw.css?_=2">
 <style type="text/css">
         /* Override some defaults */
     html, body {
-        background-color: #2F2F2F;
-        color: #C6C6C6
-    }
-
-    a {
-        color: #07be02;
-        text-decoration: none;
-    }
-
-    a:hover {
-        color: #e28000;
+        background-color: #eee;
     }
 
     body {
@@ -442,21 +381,9 @@
         width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
     }
 
-    .table tbody tr:hover td, .table tbody tr:hover th {
-        background-color: #505050;
-    }
-
-    .form-search {
-        height: 27px;
-    }
-
-    .form-search input {
-        margin-right: 15px;
-    }
-
         /* The white background content wrapper */
     .content {
-        background-color: #3c3c3c;
+        background-color: #fff;
         padding: 20px;
         margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
         -webkit-border-radius: 0 0 6px 6px;
@@ -467,23 +394,11 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
     }
 
-    input:focus, textarea:focus {
-        border-color: rgba(226, 128, 0, 0.8);
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(226, 128, 0, 0.6);
-        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(226, 128, 0, 0.6);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(226, 128, 0, 0.6);
-        outline: 0;
-        outline: thin dotted \9;
-        /* IE6-9 */
-
-    }
-
         /* Page header tweaks */
     .page-header {
-        background-color: #1f1e1e;
+        background-color: #f5f5f5;
         padding: 20px 20px 20px;
         margin: -20px -20px 20px;
-        border-bottom: 1px solid #e28000;
     }
 
         /* Styles you shouldn't keep as they are for displaying this base example only */
@@ -529,7 +444,6 @@
                 <li class="rounds"><a href="#!/rounds">Rounds</a></li>
                 <li class="register"><a href="#!/register">Register your pilot</a></li>
             </ul>
-            <p class="navbar-text pull-right login-status"><a href="" class="login">Login</a></p>
         </div>
     </div>
 </div>

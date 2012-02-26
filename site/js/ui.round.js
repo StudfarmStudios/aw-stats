@@ -27,7 +27,10 @@
       } else {
         element.find('.username').html('<a href="#!/pilot/' + res.username + '">' + res.username + '</a>');
         var rDelta = Math.round(res.newRating - res.oldRating);
-        element.find('.rating').html( ((rDelta >= 0)? " + " : "") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
+        if (rDelta != 0) {
+          element.find('.rating').html( ((rDelta >= 0)? " + " : "") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
+        }
+
       }
 
         element.find('.position').html(posPerScore[res.score] + '.');
