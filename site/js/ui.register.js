@@ -4,41 +4,44 @@
       form;
 
   var contentHtml = document.getElementById('register-content-template').innerHTML;
-  var thankYouContentHtml =  document.getElementById('register-thank-you-template').innerHTML;
+  var thankYouContentHtml = document.getElementById('register-thank-you-template').innerHTML;
   var errorHtml = document.getElementById('register-error-template').innerHTML;
-  
+
   var register = function () {
-    content = $(contentHtml);
-    $('.container .content').html(content);
-    form = $('.container .content form');
-    $('.nav li').removeClass('active');
-    $('.nav .register').addClass('active');
+    if (content == null) {
+      content = $(contentHtml);
+      form = $('.container .content form');
+      $('.nav li').removeClass('active');
+      $('.nav .register').addClass('active');
 
-    form.submit(function() {
-      var values = $(this).serializeArray();
-      var valuesObject = {};
-      for (var i = 0; i < values.length; i++) {
-        var value = values[i];
-        valuesObject[value.name] = value.value;
-      }
-      window.aw.stats.register(valuesObject.username,
-          valuesObject.password1,
-          valuesObject.password2,
-          valuesObject.email,
-          function (data) {
-            if (data.error) {
-              $('.errors').empty();
-              var error = $(errorHtml);
-              error.find('p').append(data.error);
-              $('.errors').append(error);
-              return;
-            }
+      form.submit(function() {
+        var values = $(this).serializeArray();
+        var valuesObject = {};
+        for (var i = 0; i < values.length; i++) {
+          var value = values[i];
+          valuesObject[value.name] = value.value;
+        }
+        window.aw.stats.register(valuesObject.username,
+            valuesObject.password1,
+            valuesObject.password2,
+            valuesObject.email,
+            function (data) {
+              if (data.error) {
+                $('.errors').empty();
+                var error = $(errorHtml);
+                error.find('p').append(data.error);
+                $('.errors').append(error);
+                return;
+              }
 
-            $('.container .content').html(thankYouContentHtml);
+              $('.container .content').html(thankYouContentHtml);
 
+            });
+        return false;
       });
-      return false;
-    });
+    }
+
+    $('.container .content').html(content);
 
   };
 
