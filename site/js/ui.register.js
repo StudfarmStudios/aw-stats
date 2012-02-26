@@ -10,7 +10,9 @@
   var register = function () {
     if (content == null) {
       content = $(contentHtml);
+      $('.container .content').html(content);
       form = $('.container .content form');
+
       $('.nav li').removeClass('active');
       $('.nav .register').addClass('active');
 
@@ -39,9 +41,11 @@
             });
         return false;
       });
+    } else {
+      $('.container .content').html(content);
     }
 
-    $('.container .content').html(content);
+
 
   };
 
