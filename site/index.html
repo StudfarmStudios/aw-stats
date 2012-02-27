@@ -35,7 +35,8 @@
                     </div>
                 </fieldset>
             </form>
-            If you haven't registered a pilot do it <a class="register-link close-login-modal" href="#!/register">here</a>
+            If you haven't registered a pilot do it <a class="register-link close-login-modal"
+                                                       href="#!/register">here</a>
         </div>
         <div class="modal-footer">
             <a href="#" class="btn btn-success">Login</a>
@@ -180,7 +181,7 @@
         </h1>
     </div>
     <div class="errors"></div>
-    <form class="form-horizontal">
+    <form class="form-horizontal" method="post">
         <fieldset>
             <legend>Fill in your pilots information</legend>
             <div class="control-group">
@@ -334,6 +335,14 @@
                 </thead>
                 <tbody class="server-table"></tbody>
             </table>
+        </div>
+        <div class="span play-now">
+            <a class="btn btn-large btn-warning">Quick Play</a>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="span6">
             <h2>Scores (top 10)</h2>
             <ol class="score-list"></ol>
             <h2>Ratings (top 10)</h2>
@@ -356,6 +365,10 @@
         <td class="server-name"></td>
         <td class="server-current"></td>
         <td class="server-limit"></td>
+        <td class="server-action">
+            <a class="btn btn-success join">JOIN</a>
+            <a class="btn btn-primary info">INFO</a>
+        </td>
     </tr>
 </script>
 
@@ -366,7 +379,6 @@
 <script src="js/3rdparty/jquery.min.js"></script>
 <script src="js/3rdparty/bootstrap.min.js"></script>
 <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
-<script src="http://www.assaultwing.com:3003/socket.io/socket.io.js"></script>
 <script src="js/cache.js?_=11"></script>
 <script src="js/stats.js?_=11"></script>
 <script src="js/ui.login.js?_=11"></script>
@@ -419,6 +431,19 @@
     html, body {
         background-color: #2F2F2F;
         color: #C6C6C6
+    }
+
+    .play-now {
+        height: 100px;
+    }
+
+    .play-now .btn {
+      padding: 45px 108px;
+      font-size: 25px;
+      line-height: normal;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
     }
 
     a {
