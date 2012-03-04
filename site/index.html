@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Assault Wing - Statistics</title>
+<title>Assault Wing - Galactic Battlefront</title>
 <meta name="description" content="">
 <meta name="author" content="Jaakko Lukkari">
 
@@ -15,13 +15,14 @@
         </div>
 
         <div class="modal-body">
-            <form class="form-horizontal">
+            <form class="form-horizontal" method="post" action="login">
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label" for="login-username">Username</label>
 
                         <div class="controls">
-                            <input class="input-xlarge" id="login-username" name="username" size="30" type="text"/>
+                            <input class="input-xlarge login-input" id="login-username" name="username" size="30"
+                                   type="text"/>
                         </div>
                     </div>
 
@@ -29,20 +30,49 @@
                         <label class="control-label" for="login-password">Password</label>
 
                         <div class="controls">
-                            <input class="input-xlarge" id="login-password" name="password" size="30"
+                            <input class="input-xlarge login-input" id="login-password" name="password" size="30"
                                    type="password"/>
                         </div>
                     </div>
                 </fieldset>
             </form>
-            If you haven't registered a pilot do it <a class="register-link close-login-modal"
-                                                       href="#!/register">here</a>
+            If you haven't registered a pilot, do it <a class="register-link close-login-modal"
+                                                        href="#!/register">here</a>
         </div>
         <div class="modal-footer">
-            <a href="#" class="btn btn-success">Login</a>
+            <span class="label label-important login-error pull-left"></span>
+            <a href="#" class="btn btn-success login-button">Login</a>
             <a href="#" class="btn btn-danger close-login-modal">Close</a>
         </div>
 
+    </div>
+</script>
+
+<script id="index-content-template" type="text/template">
+    <div id="myCarousel" class="carousel">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="active item">
+                <div class="row">
+                    <div class="span4">
+                        <img class="c-logo" src="http://assaultwing.com/images/aw_logo.png"/>
+                    </div>
+                    <div class="span5 hero-unit">
+                        <p class="c-intro-text">
+                            Assault Wing is a free, action packed, ship-flying, gun blazing, explosive game of
+                            outwitting your opponents in arenas hidden deep in the far reaches of galaxies.<br/><br/>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="item">
+                <img src="http://assaultwing.com/images/ships.png"/>
+            </div>
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
     </div>
 </script>
 
@@ -336,11 +366,13 @@
                 <tbody class="server-table"></tbody>
             </table>
         </div>
+        <!--
         <div class="span play-now">
             <a class="btn btn-large btn-warning">Quick Play</a>
         </div>
+        -->
     </div>
-    <hr />
+    <hr/>
     <div class="row">
         <div class="span6">
             <h2>Scores (top 10)</h2>
@@ -365,10 +397,12 @@
         <td class="server-name"></td>
         <td class="server-current"></td>
         <td class="server-limit"></td>
+        <!--
         <td class="server-action">
             <a class="btn btn-success join">JOIN</a>
             <a class="btn btn-primary info">INFO</a>
         </td>
+        -->
     </tr>
 </script>
 
@@ -377,10 +411,12 @@
 <script src="js/3rdparty/html5.js"></script>
 <![endif]-->
 <script src="js/3rdparty/jquery.min.js"></script>
+<script src="js/3rdparty/2.5.3-crypto-min.js?_=123"></script>
 <script src="js/3rdparty/bootstrap.min.js"></script>
 <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
 <script src="js/cache.js?_=11"></script>
 <script src="js/stats.js?_=11"></script>
+<script src="js/ui.index.js?_=11"></script>
 <script src="js/ui.login.js?_=11"></script>
 <script src="js/ui.summary.js?_=11"></script>
 <script src="js/ui.register.js?_=11"></script>
@@ -389,6 +425,7 @@
 <script src="js/ui.pilots.js?_=14"></script>
 <script src="js/ui.pilot.js?_=11"></script>
 <script src="js/ui.notfound.js?_=11"></script>
+
 <script type="text/javascript">
     $(function () {
         function processHash() {
@@ -408,16 +445,7 @@
         $(window).hashchange(processHash);
         processHash();
 
-        $(function () {
-            if (window.loginToken) {
-                console.log("Logged in");
-            } else {
-                $('.login').click(function () {
-                    window.aw.ui.login.dialog();
-                    return false;
-                });
-            }
-        });
+        aw.ui.login.init();
 
     });
 </script>
@@ -438,12 +466,12 @@
     }
 
     .play-now .btn {
-      padding: 45px 108px;
-      font-size: 25px;
-      line-height: normal;
-      -webkit-border-radius: 10px;
-      -moz-border-radius: 10px;
-      border-radius: 10px;
+        padding: 45px 108px;
+        font-size: 25px;
+        line-height: normal;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
     }
 
     a {
@@ -477,6 +505,10 @@
 
     .form-search input {
         margin-right: 15px;
+    }
+
+    .login-error {
+        display: none;
     }
 
         /* The white background content wrapper */
@@ -528,8 +560,21 @@
         border: 0;
     }
 
+    .c-logo {
+        padding-top: 50px;
+        padding-left: 30px;
+    }
+
+    .c-intro-text {
+        padding-top: 100px;
+    }
+
     footer {
         margin-top: 30px;
+    }
+
+    .show-when-logged-in, .show-when-logged-out {
+        display: none;
     }
 
 </style>
@@ -547,14 +592,27 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="#">Assault Wing - Statistics</a>
+            <a class="brand" href="#">Assault Wing - Galactic Battlefront</a>
             <ul class="nav">
                 <li class="rankings" class="active"><a href="#!/summary">Summary</a></li>
                 <li class="pilots"><a href="#!/pilots">Pilots</a></li>
                 <li class="rounds"><a href="#!/rounds">Rounds</a></li>
                 <li class="register"><a href="#!/register">Register your pilot</a></li>
             </ul>
-            <!--  <p class="navbar-text pull-right login-status"><a href="" class="login">Login</a></p>  -->
+
+
+            </ul>
+            <p class="navbar-text pull-right login-status show-when-logged-out"><a href="" class="login ">Login</a></p>
+            <p class="navbar-text pull-right login-status show-when-logged-in"></p>
+            <ul class="nav pull-right show-when-logged-in">
+                <li class="dropdown open">
+                    <a href="#" class="dropdown-toggle current-user-username" data-toggle="dropdown"><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="current-user-profile" href="#">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="" class="logout ">Logout</a></li>
+                    </ul>
+                </li>
         </div>
     </div>
 </div>
