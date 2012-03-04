@@ -58,7 +58,6 @@
       if (loginModal == null) {
         loginModal = $(loginModalHtml);
         loginModal.find('.close-login-modal').click(function (e) {
-          e.preventDefault();
           loginModal.modal("hide");
           callback({error:"canceled login"});
         });
