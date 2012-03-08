@@ -21,21 +21,42 @@
                 $('select[name=serverId]').append(element);
               })
             });
-            
+
+            var weapons = ["bazooka", "rockets", "hovermine"];
+            var mods = ["blink", "repulsor", "catmoflage"];
+            var ships = ["Windlord", "Bugger", "Plissken"];
+
+            var i;
+
+            for (i = 0; i < weapons.length; i++) {
+                $('select[name=weapon]').append('<option value="' + weapons[i] + '">' + weapons[i] + '</option>');
+            }
+
+            for (i = 0; i < mods.length; i++) {
+                $('select[name=mod]').append('<option value="' + mods[i] + '">' + mods[i] + '</option>');
+            }
+
+            for (i = 0; i < ships.length; i++) {
+                $('select[name=ship]').append('<option value="' + ships[i] + '">' + ships[i] + '</option>');
+            }
+
             $('input[name=login_token]').val(window.loginToken);
 
             $('form').submit(function () {
-                var serverId = $("select option:selected").val();
-                var name = $("select option:selected").html();
+                var serverId = $("select[name=serverId] option:selected").val();
+                var name = $("select[name=serverId] option:selected").html();
                 aw.stats.api('/server/' + serverId + '/join', {}, function (server) {
                 // ?quickstart=&server_name=MyServer&server=foobar.com:16727:16727,192.128.0.1:16727:16727&login_token=29384739874abcd
                 var params = {
                     quickstart:"",
                     server_name:name,
                     server: server.server + "," + server.server2,
-                    login_token: $('input[name=login_token]').val()
+                    login_token: $('input[name=login_token]').val(),
+                    ship: $("select[name=ship] option:selected").val(),
+                    mod: $("select[name=mod] option:selected").val(),
+                    weapon: $("select[name=weapon] option:selected").val()
                 };
-                $('#status').html($.param(params));
+                $('#status').html(decodeURIComponent($.param(params)));
                 document.awl.start(decodeURIComponent($.param(params)));
                 });
                 return false;
