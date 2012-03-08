@@ -36,7 +36,7 @@
                     login_token: $('input[name=login_token]').val()
                 };
                 $('#status').html($.param(params));
-                document.awl.start($.param(params));
+                document.awl.start(decodeURIComponent($.param(params)));
                 });
                 return false;
             });
