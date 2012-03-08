@@ -4,11 +4,42 @@
     <meta charset="utf-8">
     <title>Assault Wing - Plugin test</title>
     <script src="js/3rdparty/jquery.min.js"></script>
+    <script src="js/cache.js"></script>
+    <script src="js/stats.js"></script>
     <object id="awl" type="application/x-assaultwinglauncher" width="1" height="1"></object>
     <script type="text/javascript">
       $(function () {
+        window.loginToken = window.loginToken || (window.localStorage ? window.localStorage['loginToken'] : null);
         if (document.awl.start) {
             $('#start').show();
+
+            aw.stats.api('/server/list', {}, function (servers) {
+              $.each(servers, function (indx, server) {
+                  //[{"name":"AW Server 1","currentclients":"0","maxclients":"16","id":"33","awversion":"1.16.0.7"}]
+                  var element = $('<option value="' + server.id + '">'+ server.name +'</option>');
+                  element.data(server);
+                $('select[name=serverId]').append(element);
+              })
+            });
+            
+            $('input[name=login_token]').val(window.loginToken);
+
+            $('form').submit(function () {
+                var serverId = $("select option:selected").val();
+                var name = $("select option:selected").html();
+                aw.stats.api('/server/' + serverId + '/join', {}, function (server) {
+                // ?quickstart=&server_name=MyServer&server=foobar.com:16727:16727,192.128.0.1:16727:16727&login_token=29384739874abcd
+                var params = {
+                    quickstart:"",
+                    server_name:name,
+                    server: server.server + "," + server.server2,
+                    login_token: $('input[name=login_token]').val()
+                };
+                $('#status').html($.param(params));
+                document.awl.start($.param(params));
+                });
+                return false;
+            });
         } else {
             $('#help').show();
         }
@@ -16,7 +47,19 @@
     </script>
 </head>
 <body>
-    <div id="start" style="display: none"><a href="javascript:void(0);" onclick="document.awl.start('');">Start Assault Wing</a></div>
+    <div id="start" style="display: none">
+        <form method="POST">
+            <table>
+                <tr><td>LoginToken</td><td><input type="text" name="login_token" value=""></td></tr>
+                <tr><td>Server</td><td><select name="serverId"></select></td></tr>
+                <tr><td>Ship</td><td><select name="ship"></select></td></tr>
+                <tr><td>Weapon</td><td><select name="weapon"></select></td></tr>
+                <tr><td>Mod</td><td><select name="mod"></select></td></tr>
+                <tr><td></td><td><input type="submit" value="Play" /></td></tr>
+            </table>
+        </form>
+        <div id="status"></div>
+    </div>
     <div id="help" style="display: none">
         <h1>Plugin not installed</h1><br />
         1. Get <a href="files/npAssaultWingLauncher.dll">npAssaultWingLauncher.dll</a> <br />
