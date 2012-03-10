@@ -72,11 +72,24 @@
 
   function constructServerList() {
     window.aw.stats.api('/server/list', {}, function (servers) {
+
+      if (servers.length > 0) {
+        var server = servers[0];
+        content.find('.play-now a').click(function (e) {
+          aw.ui.awl.join(server);
+          e.preventDefault();
+        });
+      }
+
       $.each(servers, function (indx, server) {
         var serverElement = $(serverHtml);
         serverElement.find('.server-name').html(server.name);
         serverElement.find('.server-current').html(server.currentclients);
         serverElement.find('.server-limit').html(server.maxclients);
+        serverElement.find('.join').click(function (e) {
+          aw.ui.awl.join(server);
+          e.preventDefault();
+        });
         serverList.append(serverElement);
       })
     });

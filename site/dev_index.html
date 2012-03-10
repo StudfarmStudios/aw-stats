@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assault Wing - Galactic Battlefront</title>
+<meta name="description" content="">
+<meta name="author" content="Jaakko Lukkari">
+
+<script id="awl-equipment-template" type="text/template">
+    <div class="modal fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+
+            <h3 class="equipment-modal-title">Joining <%=server.name%></h3>
+        </div>
+
+        <div class="modal-body">
+            <div class="equipment-selector">
+                <% for (var i = 0; i < equipment.length; i++) { %>
+                <div class="equipment-type row">
+                    <div class="previous-equipment span1">
+                        <a class="btn btn-success" data-direction="left" data-type="<%=equipment[i].type%>" href="#"><</a>
+                    </div>
+                    <div class="span2 item">
+                        <ul class="<%=equipment[i].type%>-list" data-type="<%=equipment[i].type%>">
+                            <% for (var x = 0; x < equipment[0].options.length; x++) { %>
+                            <li class="<%=(equipment[i].options[x].fav?'selected-equipment':'not-selected-equipment')%>" data-value="<%=equipment[i].options[x].value%>">
+                                <div class="image"><img src="<%=equipment[i].options[x].img%>" /></div>
+                                <div class="name"><%=equipment[i].options[x].name%></div>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                    <div class="next-equipment span1">
+                        <a class="btn btn-success"  data-direction="right" data-type="<%=equipment[i].type%>" href="#">></a>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-success">Join</a>
+            <a data-dismiss="modal" href="#" class="btn btn-danger">Cancel</a>
+        </div>
+
+    </div>
+</script>
+
+<script id="login-modal-template" type="text/template">
+    <div class="modal fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+
+            <h3>Login</h3>
+        </div>
+
+        <div class="modal-body">
+            <form class="form-horizontal" method="post" action="login">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="login-username">Username</label>
+
+                        <div class="controls">
+                            <input class="input-xlarge login-input" id="login-username" name="username" size="30"
+                                   type="text"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="login-password">Password</label>
+
+                        <div class="controls">
+                            <input class="input-xlarge login-input" id="login-password" name="password" size="30"
+                                   type="password"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <p>If you haven't registered a pilot, do it <a class="register-link close-login-modal"
+                                                        href="#!/register">here</a></p>
+        </div>
+        <div class="modal-footer">
+            <span class="label label-important login-error pull-left"></span>
+            <a href="#" class="btn btn-success login-button">Login</a>
+            <a href="#" class="btn btn-danger close-login-modal">Close</a>
+        </div>
+
+    </div>
+</script>
+
+<script id="index-content-template" type="text/template">
+    <div id="myCarousel" class="carousel">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="active item">
+                <div class="row">
+                    <div class="span4">
+                        <img class="c-logo" src="http://assaultwing.com/images/aw_logo.png"/>
+                    </div>
+                    <div class="span5 hero-unit">
+                        <p class="c-intro-text">
+                            Assault Wing is a free, action packed, ship-flying, gun blazing, explosive game of
+                            outwitting your opponents in arenas hidden deep in the far reaches of galaxies.<br/><br/>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="item">
+                <img src="http://assaultwing.com/images/ships.png"/>
+            </div>
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+</script>
+
+<script id="notfound-content-template" type="text/template">
+    <div class="page-header">
+        <h1>Page not found
+            <small></small>
+        </h1>
+    </div>
+</script>
+
+<script id="pilot-content-template" type="text/template">
+    <div class="page-header">
+        <h1></h1>
+    </div>
+    <div class="row">
+        <div class="span7">
+            <div class="row">
+                <div class="span2"><b>Last played</b></div>
+                <div class="span3 lastSeen">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Registered</b></div>
+                <div class="span3 created">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Flight hours</b></div>
+                <div class="span3 playTime">Loading</div>
+            </div>
+            <br/>
+
+            <h2>Most used</h2>
+
+            <div class="row most-used-title-row">
+                <div class="span2"><b>Ship</b></div>
+                <div class="span2"><b>Weapon</b></div>
+                <div class="span2"><b>Mod</b></div>
+            </div>
+            <div class="row most-used-image-row">
+                <div class="span2 ship-image"></div>
+                <div class="span2 weapon2-image"></div>
+                <div class="span2 device-image"></div>
+            </div>
+            <div class="row most-used-text-row">
+                <div class="span2 ship-text"></div>
+                <div class="span2 weapon2-text"></div>
+                <div class="span2 device-text"></div>
+            </div>
+            <br/>
+
+            <h2>Data</h2>
+
+            <div class="row">
+                <div class="span2"><b>Kills</b></div>
+                <div class="span3 kills">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Deaths</b></div>
+                <div class="span3 deaths">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Suicides</b></div>
+                <div class="span3 suicides">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Kills / Deaths</b></div>
+                <div class="span3 kdratio">Loading</div>
+            </div>
+        </div>
+        <div class="span3 well">
+            <h3>Rankings</h3>
+
+            <div class="row">
+                <div class="span2"><b>Rating</b></div>
+                <div class="span1 ratingRank">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Score</b></div>
+                <div class="span1 scoreRank">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Kills</b></div>
+                <div class="span1 killsTotalRank">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Victories</b></div>
+                <div class="span1 winsTotalRank">Loading</div>
+            </div>
+            <div class="row">
+                <div class="span2"><b>Flight time</b></div>
+                <div class="span1 playTimeRank">Loading</div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="pilots-content-template" type="text/template">
+    <div class="page-header">
+        <h1>Pilots
+            <small></small>
+        </h1>
+    </div>
+    <form class="well form-search pilots-search">
+        <button type="submit" class="btn btn-warning pull-right">Search</button>
+        <input type="text" class="input-medium search-query pull-right" name="search">
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Rating</th>
+            <th>Score</th>
+            <th>Flight hours</th>
+        </tr>
+        </thead>
+        <tbody class="pilot-table"></tbody>
+    </table>
+    <div class="pagination">
+        <ul></ul>
+    </div>
+</script>
+
+<script id="pilots-pilot-template" type="text/template">
+    <tr>
+        <td class="pilot-name"></td>
+        <td class="pilot-rating"></td>
+        <td class="pilot-score"></td>
+        <td class="pilot-flight-time"></td>
+    </tr>
+</script>
+
+<script id="register-content-template" type="text/template">
+    <div class="page-header">
+        <h1>Register your pilot
+            <small></small>
+        </h1>
+    </div>
+    <div class="errors"></div>
+    <form class="form-horizontal" method="post">
+        <fieldset>
+            <legend>Fill in your pilots information</legend>
+            <div class="control-group">
+                <label class="control-label" for="pilot-username">Username</label>
+
+                <div class="controls">
+                    <input class="input-xlarge" id="pilot-username" name="username" size="30" type="text"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="pilot-email">Email</label>
+
+                <div class="controls">
+                    <input class="input-xlarge" id="pilot-email" name="email" size="30" type="text"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="pilot-password1">Password</label>
+
+                <div class="controls">
+                    <input class="input-xlarge" id="pilot-password1" name="password1" size="30" type="password"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="pilot-password2">Confirm password</label>
+
+                <div class="controls">
+                    <input class="input-xlarge" id="pilot-password2" name="password2" size="30" type="password"/>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input type="submit" class="btn btn-warning" value="Register"/>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+<script id="register-thank-you-template" type="text/template">
+    <div class="page-header">
+        <h1>Thanks for registering your pilot!
+            <small></small>
+        </h1>
+    </div>
+    Your pilot is now registered and can be use to login from Assault Wing client and gain statistics on the official
+    servers
+</script>
+
+<script id="register-error-template" type="text/template">
+    <div class="alert alert-error">
+        <p>
+            <strong>Error! </strong>
+        </p>
+    </div>
+</script>
+
+<script id="round-content-template" type="text/template">
+    <div class="page-header">
+        <h1></h1>
+    </div>
+    <div class="row">
+        <div class="span2"><b>Arena</b></div>
+        <div class="span6 arena">Loading</div>
+    </div>
+    <div class="row">
+        <div class="span2"><b>Started</b></div>
+        <div class="span6 started">Loading</div>
+    </div>
+    <div class="row">
+        <div class="span2"><b>Ended</b></div>
+        <div class="span6 ended">Loading</div>
+    </div>
+    <div class="row">
+        <div class="span2"><b>Winner(s)</b></div>
+        <div class="span6 winner">Loading</div>
+    </div>
+    <br/>
+
+    <h2>Results</h2>
+    <table class="table">
+        <thead>
+        <th>Pos.</th>
+        <th>Pilot</th>
+        <th>Kills</th>
+        <th>Deaths</th>
+        <th>Suicides</th>
+        <th>Score</th>
+        <th>Rating</th>
+        </thead>
+        <tbody class="result-table"></tbody>
+    </table>
+
+
+</script>
+
+<script id="round-score-template" type="text/template">
+    <tr>
+        <td class="position"></td>
+        <td class="username"></td>
+        <td class="kills"></td>
+        <td class="deaths"></td>
+        <td class="suicides"></td>
+        <td class="score"></td>
+        <td class="rating"></td>
+    </tr>
+</script>
+
+<script id="rounds-content-template" type="text/template">
+    <div class="page-header">
+        <h1>Rounds
+            <small></small>
+        </h1>
+    </div>
+    <table class="table">
+        <thead>
+        <th>Arena</th>
+        <th>Started</th>
+        <th>Ended</th>
+        <th>Winner</th>
+        </thead>
+        <tbody class="round-table"></tbody>
+    </table>
+    <div class="pagination">
+        <ul></ul>
+    </div>
+</script>
+
+
+<script id="rounds-round-template" type="text/template">
+    <tr>
+        <td class="round-arena"></td>
+        <td class="round-started"></td>
+        <td class="round-ended"></td>
+        <td class="round-winner"></td>
+    </tr>
+</script>
+
+<script id="summary-content-template" type="text/template">
+    <div class="page-header">
+        <h1>Battlefront Summary
+            <small></small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <h2>Servers</h2>
+            <table class="table">
+                <thead>
+                <th>Name</th>
+                <th>Current</th>
+                <th>Limit</th>
+                </thead>
+                <tbody class="server-table"></tbody>
+            </table>
+        </div>
+
+        <div class="span play-now">
+            <a class="btn btn-large btn-warning">Quick Play</a>
+        </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="span6">
+            <h2>Scores (top 10)</h2>
+            <ol class="score-list"></ol>
+            <h2>Ratings (top 10)</h2>
+            <ol class="rating-list"></ol>
+        </div>
+        <div class="span4">
+            <h3>Newest pilots</h3>
+            <ul class="pilot-list"></ul>
+            <a class="more-pilots btn" href="#">Show more</a>
+        </div>
+    </div>
+</script>
+<script id="summary-pilot-template" type="text/template">
+    <li class="pilot"><a href="#"></a>
+        <small class="score"></small>
+    </li>
+</script>
+<script id="summary-server-template" type="text/template">
+    <tr>
+        <td class="server-name"></td>
+        <td class="server-current"></td>
+        <td class="server-limit"></td>
+
+        <td class="server-action">
+            <a class="btn btn-success join">JOIN</a>
+            <!-- <a class="btn btn-primary info">INFO</a> -->
+        </td>
+
+    </tr>
+</script>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+<!--[if lt IE 9]>
+<script src="js/3rdparty/html5.js"></script>
+<![endif]-->
+<script src="js/3rdparty/jquery.min.js"></script>
+<script src="js/3rdparty/2.5.3-crypto-min.js?_=123"></script>
+<script src="js/3rdparty/bootstrap.min.js"></script>
+<script src="js/3rdparty/jquery.observehashchange.min.js"></script>
+<script src="js/utils.js?_=12"></script>
+<script src="js/cache.js?_=12"></script>
+<script src="js/stats.js?_=12"></script>
+<script src="js/awl.js?_=12"></script>
+<script src="js/ui.index.js?_=12"></script>
+<script src="js/ui.login.js?_=12"></script>
+<script src="js/ui.summary.js?_=12"></script>
+<script src="js/ui.register.js?_=12"></script>
+<script src="js/ui.rounds.js?_=12"></script>
+<script src="js/ui.round.js?_=12"></script>
+<script src="js/ui.pilots.js?_=15"></script>
+<script src="js/ui.pilot.js?_=12"></script>
+<script src="js/ui.notfound.js?_=12"></script>
+<script src="js/ui.awl.js?_=12"></script>
+<script type="text/javascript">
+    aw.awl.init();
+    $(function () {
+        function processHash() {
+            var hash = window.location.hash || "#!/summary";
+            if (hash == "#" || hash == "#!" || hash == "#!/") {
+                hash = "#!/summary";
+            }
+            var parts = hash.split('/');
+            var view = parts[1];
+            if (window.aw.ui[view] && typeof window.aw.ui[view] === 'function') {
+                window.currentView = window.aw.ui[view](hash);
+            } else {
+                window.currentView = window.aw.ui.notfound(hash);
+            }
+        }
+
+        $(window).hashchange(processHash);
+        processHash();
+
+        aw.ui.login.init();
+
+    });
+</script>
+
+<!-- Le styles -->
+<link rel="stylesheet" href="css/bootstrap.min.css?_=1">
+<link rel="stylesheet" href="css/darkstrap.css?_=1">
+<link rel="stylesheet" href="css/aw.css?_=2">
+<style type="text/css">
+        /* Override some defaults */
+    html, body {
+        background-color: #2F2F2F;
+        color: #C6C6C6
+    }
+
+    .play-now {
+        height: 100px;
+    }
+
+    .play-now .btn {
+        padding: 45px 108px;
+        font-size: 25px;
+        line-height: normal;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    a {
+        color: #07be02;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #e28000;
+    }
+
+    body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+    }
+
+    .container > footer p {
+        text-align: center; /* center align it with the container */
+    }
+
+    .container {
+        width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+    }
+
+    .table tbody tr:hover td, .table tbody tr:hover th {
+        background-color: #505050;
+    }
+
+    .form-search {
+        height: 27px;
+    }
+
+    .form-search input {
+        margin-right: 15px;
+    }
+
+    .login-error {
+        display: none;
+    }
+
+        /* The white background content wrapper */
+    .content {
+        background-color: #3c3c3c;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+        -moz-border-radius: 0 0 6px 6px;
+        border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+        -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+    }
+
+    input:focus, textarea:focus {
+        border-color: rgba(226, 128, 0, 0.8);
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(226, 128, 0, 0.6);
+        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(226, 128, 0, 0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(226, 128, 0, 0.6);
+        outline: 0;
+        outline: thin dotted \9;
+        /* IE6-9 */
+
+    }
+
+        /* Page header tweaks */
+    .page-header {
+        background-color: #1f1e1e;
+        padding: 20px 20px 20px;
+        margin: -20px -20px 20px;
+        border-bottom: 1px solid #e28000;
+    }
+
+        /* Styles you shouldn't keep as they are for displaying this base example only */
+    .content .span10,
+    .content .span4 {
+        min-height: 500px;
+    }
+
+        /* Give a quick and non-cross-browser friendly divider */
+    .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+    }
+
+    .topbar .btn {
+        border: 0;
+    }
+
+    .c-logo {
+        padding-top: 50px;
+        padding-left: 30px;
+    }
+
+    .c-intro-text {
+        padding-top: 100px;
+    }
+
+    footer {
+        margin-top: 30px;
+    }
+
+    .show-when-logged-in, .show-when-logged-out {
+        display: none;
+    }
+
+    .equipment-selector .not-selected-equipment {
+        display: none;
+    }
+
+    .equipment-selector {
+        margin-left: 130px;
+    }
+
+    .equipment-selector .selected-equipment {
+        display: block;
+    }
+
+    .equipment-selector .name {
+        text-align: center;
+    }
+
+    .previous-equipment {
+        padding-left: 20px;
+    }
+
+    .next-equipment {
+        padding-left: 5px;
+    }
+
+    .previous-equipment, .next-equipment {
+        width: 25px;
+        padding-top: 35px;
+    }
+
+    .previous-equipment a, .next-equipment a {
+       padding-top: 20px;
+       padding-bottom: 20px;
+    }
+
+    .equipment-selector .item {
+        margin-left: 0px;
+    }
+
+
+</style>
+
+<!-- Le fav and touch icons -->
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="#">Assault Wing - Galactic Battlefront</a>
+            <ul class="nav">
+                <li class="rankings" class="active"><a href="#!/summary">Summary</a></li>
+                <li class="pilots"><a href="#!/pilots">Pilots</a></li>
+                <li class="rounds"><a href="#!/rounds">Rounds</a></li>
+                <li class="register show-when-logged-out"><a href="#!/register">Register your pilot</a></li>
+            </ul>
+
+
+            </ul>
+            <p class="navbar-text pull-right login-status show-when-logged-out"><a href="" class="login ">Login</a></p>
+            <p class="navbar-text pull-right login-status show-when-logged-in"></p>
+            <ul class="nav pull-right show-when-logged-in">
+                <li class="dropdown open">
+                    <a href="#" class="dropdown-toggle current-user-username" data-toggle="dropdown"><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="current-user-profile" href="#">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="" class="logout ">Logout</a></li>
+                    </ul>
+                </li>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+        <!-- CONTENT START -->
+
+        <!-- CONTENT END -->
+    </div>
+    <footer>
+        <p>Copyright &copy; 2011 Studfarm Studios</p>
+    </footer>
+
+</div>
+<!-- /container -->
+
+</body>
+</html>
