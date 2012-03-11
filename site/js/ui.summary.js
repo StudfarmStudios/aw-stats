@@ -97,7 +97,10 @@
 
       }
 
+      var serverIds = [];
       $.each(servers, function (indx, server) {
+
+        serverIds.push(server.id);
 
         var serverElement = serverElements[server.id];
         if (serverElement == undefined) {
@@ -113,8 +116,18 @@
         }
 
         serverElement.find('.server-current').html(server.currentclients);
-      })
+      });
+
+      var currentIds = Object.keys(serverElements);
+      $.each(currentIds, function (indx, id) {
+        if (!$.inArray(id, serverIds)) {
+          serverElements[id].remove();
+        }
+      });
+          
     });
+
+
 
 
     serverUpdateTimeout = setTimeout(function () {
