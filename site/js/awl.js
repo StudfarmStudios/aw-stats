@@ -82,7 +82,7 @@
       kvps.push(key + "=" + params[key]);
     }
 
-    this.plugin[0].start(kvps.join('&'));
+    document.awl.start(kvps.join('&'));
   };
 
   if (window.aw == undefined) {
