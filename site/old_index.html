@@ -6,89 +6,6 @@
 <meta name="description" content="">
 <meta name="author" content="Jaakko Lukkari">
 
-<script id="awl-equipment-template" type="text/template">
-    <div class="modal fade">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-
-            <h3 class="equipment-modal-title"><%=title%></h3>
-        </div>
-
-        <div class="modal-body">
-            <div class="equipment-selector">
-                <% for (var i = 0; i < equipment.length; i++) { %>
-                <div class="equipment-type row">
-                    <div class="previous-equipment span1">
-                        <a class="btn btn-success" data-direction="left" data-type="<%=equipment[i].type%>" href="#"><</a>
-                    </div>
-                    <div class="span2 item">
-                        <ul class="<%=equipment[i].type%>-list" data-type="<%=equipment[i].type%>">
-                            <% for (var x = 0; x < equipment[0].options.length; x++) { %>
-                            <li class="<%=(equipment[i].options[x].fav?'selected-equipment':'not-selected-equipment')%>" data-value="<%=equipment[i].options[x].value%>">
-                                <div class="image"><img src="<%=equipment[i].options[x].img%>" /></div>
-                                <div class="name"><%=equipment[i].options[x].name%></div>
-                            </li>
-                            <% } %>
-                        </ul>
-                    </div>
-                    <div class="next-equipment span1">
-                        <a class="btn btn-success"  data-direction="right" data-type="<%=equipment[i].type%>" href="#">></a>
-                    </div>
-                </div>
-                <% } %>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-success join"><%=buttonText%></a>
-            <a data-dismiss="modal" href="#" class="btn btn-danger">Cancel</a>
-        </div>
-
-    </div>
-</script>
-
-<script id="awl-plugin-not-found-template" type="text/template">
-    <div class="modal fade">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-
-            <h3 class="equipment-modal-title">Install Assault Wing</h3>
-        </div>
-
-        <div class="modal-body">
-            You seem to be missing a browser plugin that enables Assault Wing to launch from the browser. To fix this install/update Assault Wing. <br /><br /><br />
-            
-            <a href="http://assaultwing.com/install/setup.exe" class="btn btn-primary">Install</a>
-            
-        </div>
-        <div class="modal-footer">
-            <a data-dismiss="modal" href="#" class="btn btn-success">Ok</a>
-        </div>
-
-    </div>
-</script>
-
-<script id="awl-auto-play-template" type="text/template">
-    <div class="modal fade">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-
-            <h3 class="equipment-modal-title">Forever Alone? Not for long!</h3>
-        </div>
-
-        <div class="modal-body">
-            Auto Play lets Assault Wing automatically start when other pilots join a server.
-            This will give you the power to continue surfing and doing other things while the servers a empty.
-            <br /><br />
-            Only thing you have to do is to keep this tab/browser open.
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-success start-auto-play">Ok</a>
-            <a data-dismiss="modal" href="#" class="btn btn-danger">Cancel</a>
-        </div>
-
-    </div>
-</script>
-
 <script id="login-modal-template" type="text/template">
     <div class="modal fade">
         <div class="modal-header">
@@ -98,6 +15,9 @@
         </div>
 
         <div class="modal-body">
+            <h4>What is this (Or what will it be)?</h4>
+            <p>We are currently developing new features to Assault Wing. One of these features is the ability to login and join online games directly from the browser.</p>
+            <hr />
             <form class="form-horizontal" method="post" action="login">
                 <fieldset>
                     <div class="control-group">
@@ -449,11 +369,11 @@
                 <tbody class="server-table"></tbody>
             </table>
         </div>
-
-        <div class="span play-buttons">
-            <div class="button-container play-now"><a class="btn btn-large btn-warning">Quick Play</a></div>
-            <div class="button-container auto-play"><a class="btn btn-large btn-warning">Auto Play</a></div>
+        <!--
+        <div class="span play-now">
+            <a class="btn btn-large btn-warning">Quick Play</a>
         </div>
+        -->
     </div>
     <hr/>
     <div class="row">
@@ -480,12 +400,12 @@
         <td class="server-name"></td>
         <td class="server-current"></td>
         <td class="server-limit"></td>
-
+        <!--
         <td class="server-action">
             <a class="btn btn-success join">JOIN</a>
-            <!-- <a class="btn btn-primary info">INFO</a> -->
+            <a class="btn btn-primary info">INFO</a>
         </td>
-
+        -->
     </tr>
 </script>
 
@@ -497,10 +417,8 @@
 <script src="js/3rdparty/2.5.3-crypto-min.js?_=123"></script>
 <script src="js/3rdparty/bootstrap.min.js"></script>
 <script src="js/3rdparty/jquery.observehashchange.min.js"></script>
-<script src="js/utils.js?_=12"></script>
 <script src="js/cache.js?_=12"></script>
 <script src="js/stats.js?_=12"></script>
-<script src="js/awl.js?_=12"></script>
 <script src="js/ui.index.js?_=12"></script>
 <script src="js/ui.login.js?_=12"></script>
 <script src="js/ui.summary.js?_=12"></script>
@@ -510,9 +428,8 @@
 <script src="js/ui.pilots.js?_=15"></script>
 <script src="js/ui.pilot.js?_=12"></script>
 <script src="js/ui.notfound.js?_=12"></script>
-<script src="js/ui.awl.js?_=12"></script>
+
 <script type="text/javascript">
-    aw.awl.init();
     $(function () {
         function processHash() {
             var hash = window.location.hash || "#!/summary";
@@ -521,11 +438,6 @@
             }
             var parts = hash.split('/');
             var view = parts[1];
-
-            if (window.currentView && window.currentView.cleanup) {
-                window.currentView.cleanup();
-            }
-
             if (window.aw.ui[view] && typeof window.aw.ui[view] === 'function') {
                 window.currentView = window.aw.ui[view](hash);
             } else {
@@ -552,17 +464,12 @@
         color: #C6C6C6
     }
 
-    .play-buttons {
-        height: 150px;
+    .play-now {
+        height: 100px;
     }
 
-    .button-container {
-        height: 85px;
-    }
-
-    .play-now .btn, .auto-play .btn {
-        width: 160px;
-        padding: 20px 80px;
+    .play-now .btn {
+        padding: 45px 108px;
         font-size: 25px;
         line-height: normal;
         -webkit-border-radius: 10px;
@@ -673,49 +580,6 @@
         display: none;
     }
 
-    .equipment-selector .not-selected-equipment {
-        display: none;
-    }
-
-    .equipment-selector {
-        margin-left: 130px;
-    }
-
-    .equipment-selector .selected-equipment {
-        display: block;
-    }
-
-    .equipment-selector .name {
-        text-align: center;
-    }
-
-    .previous-equipment {
-        padding-left: 20px;
-    }
-
-    .next-equipment {
-        padding-left: 5px;
-    }
-
-    .previous-equipment, .next-equipment {
-        width: 25px;
-        padding-top: 35px;
-    }
-
-    .previous-equipment a, .next-equipment a {
-       padding-top: 20px;
-       padding-bottom: 20px;
-    }
-
-    .equipment-selector .item {
-        margin-left: 0px;
-    }
-
-    .disable-auto-play {
-        display: none;
-    }
-
-
 </style>
 
 <!-- Le fav and touch icons -->
@@ -741,8 +605,7 @@
 
 
             </ul>
-
-            <p class="navbar-text pull-right login-status show-when-logged-out"><a href="#" class="login ">Login</a></p>
+            <p class="navbar-text pull-right login-status show-when-logged-out"><a href="" class="login ">Login</a></p>
             <p class="navbar-text pull-right login-status show-when-logged-in"></p>
             <ul class="nav pull-right show-when-logged-in">
                 <li class="dropdown open">
@@ -753,8 +616,6 @@
                         <li><a href="" class="logout ">Logout</a></li>
                     </ul>
                 </li>
-            </ul>
-            <p class="navbar-text pull-right disable-auto-play"><a href="#">Disable Auto Play</a></p>
         </div>
     </div>
 </div>
@@ -771,6 +632,6 @@
 
 </div>
 <!-- /container -->
-<object id="awl" type="application/x-assaultwinglauncher" width="1" height="1"></object>
+
 </body>
 </html>
