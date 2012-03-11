@@ -1,6 +1,7 @@
 (function (window) {
 
   var equipmentModal;
+  var pluginNotFoundModal;
 
   //var weapons = ["bazooka", "rockets", "hovermine"];
   //var mods = ["blink", "repulsor", "catmoflage"];
@@ -42,6 +43,11 @@
 
   };
 
+  awl.pluginNotFoundError = function () {
+    pluginNotFoundModal = $(tmpl('awl-plugin-not-found-template', {}));
+    pluginNotFoundModal.modal("show");
+  };
+
   awl.equipment = function (server, user, cb) {
 
     var callback = function (data) {
@@ -59,13 +65,9 @@
       }
 
       $.each(item.options, function (indx, option) {
-        if (option.value == fav) {
-          option.fav = true;
-        }
+        option.fav = (option.value == fav);
       });
     });
-
-    console.log(equipment);
 
     equipmentModal = $(tmpl('awl-equipment-template', {server: server, equipment: equipment}));
     equipmentModal.modal("show");
@@ -105,15 +107,54 @@
       }
     });
 
+    equipmentModal.find('.join').click(function (e) {
+      e.preventDefault();
+      var item = $(this);
+
+
+      var selectedEquipment = {};
+      equipmentModal.find('.selected-equipment').each(function (indx, equip) {
+        equip = $(equip);
+
+        var value = equip.data('value');
+        var type = equip.parent().data('type');
+
+        selectedEquipment[type] = value;
+
+      });
+
+      if (window.localStorage) {
+        var key;
+        for (key in selectedEquipment) {
+          localStorage['fav_equipment_' + key] = selectedEquipment[key];
+        }
+      }
+
+
+      callback(selectedEquipment);
+
+
+      equipmentModal.modal('hide');
+    });
+
 
     equipmentModal.on('hidden', function () {
       equipmentModal.remove();
-      cb({error: 'user canceled'});
+      callback({error: 'user canceled'});
     });
   };
 
 
   awl._getUserFavorites = function (user) {
+
+    if (window.localStorage && localStorage['fav_equipment_ship']) {
+      return {
+        ship: localStorage['fav_equipment_ship'],
+        mod: localStorage['fav_equipment_mod'],
+        weapon: localStorage['fav_equipment_weapon']
+      };
+    }
+
     var mostUsedMod = "repulsor";
     var mostUsedWeapon = "rockets";
     var mostUsedShip = "Bugger";
@@ -156,7 +197,7 @@
   };
 
   awl.join = function (server) {
-    if (aw.awl.isPluginInstalled() || true /** remove this in production **/) {
+    if (aw.awl.isPluginInstalled()) {
       aw.ui.login.dialog(function (user) {
         if (user.error) {
 
@@ -165,6 +206,11 @@
         }
         aw.ui.awl.equipment(server, user, function (equipment) {
           aw.stats.api('/server/' + server.id + '/join', {}, function (joinInfo) {
+                if (joinInfo.fail) {
+                  alert(joinInfo.fail);
+                  return;
+                }
+                
                 var params = {
                   quickstart:"",
                   server_name:server.name,
@@ -174,12 +220,13 @@
                   mod: equipment.mod,
                   weapon: equipment.weapon
                 };
+
                 aw.awl.start(params);
               });
         });
       });
     } else {
-      // TODO SHOP ERROR DIALOG
+      awl.pluginNotFoundError();
     }
   };
 

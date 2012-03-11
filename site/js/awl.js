@@ -16,6 +16,10 @@
   };
 
   awl.init = function () {
+    if (!this.isPluginInstalled()) {
+      return false;
+    }
+
     if (!this.isPluginLoaded()) {
       this._loadPlugin();
     } else {
@@ -24,15 +28,51 @@
   };
 
   awl.isPluginInstalled = function () {
-    if (!this.isPluginLoaded()) {
-      throw new Error("Plugin is not loaded");
+
+    var mimeTypes = navigator.mimeTypes;
+
+    if (mimeTypes) {
+      if (navigator.mimeTypes["application/x-assaultwinglauncher"] != undefined) {
+        return true;
+      }
     }
 
-    return this.plugin[0].start != undefined;
+    var plugins = navigator.plugins;
+
+    if (plugins) {
+
+      if (navigator.plugins['Assault Wing Launcher']) {
+        return true;
+      }
+
+
+      for (var i = 0; i < plugins.length; i++) {
+        var mimeTypes = plugins[i];
+        for (var x = 0; x < mimeTypes.length; x++) {
+          var mimeType = mimeTypes[x];
+          if (mimeType.type == "application/x-assaultwinglauncher") {
+            return true;
+          }
+        }
+      }
+    }
+
+    if (window.ActiveXObject) {
+      try {
+        // AcroPDF.PDF is used by version 7 and later
+        var plugin = new ActiveXObject('StudfarmStudios.AssaultWingLauncher');
+        return true;
+      } catch (e) {
+        alert(e);
+      }
+    }
+
+
+    return false;
   };
 
   awl.start = function (params) {
-    if (this.isPluginLoaded && this.isPluginInstalled()) {
+    if (!this.isPluginInstalled() || !this.isPluginLoaded()) {
       return false;
     }
 
@@ -41,7 +81,6 @@
     for (key in params) {
       kvps.push(key + "=" + params[key]);
     }
-
 
     this.plugin[0].start(kvps.join('&'));
   };

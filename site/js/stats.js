@@ -147,7 +147,7 @@
   };
 
   stats.getUser = function (callback) {
-    window.loginToken = window.loginToken || (window.localStorage?window.localStorage['loginToken']:null);
+    window.loginToken = window.loginToken || (window.localStorage ? window.localStorage['loginToken'] : null);
     if (window.loginToken == undefined) {
       callback({error: "not logged in"});
       return;
@@ -167,33 +167,52 @@
   };
 
   stats.login = function (username, password, callback) {
-    $.ajax({
-      url : 'login',
-      dataType : 'json',
-      'beforeSend' : function(xhr) {
-        var bytes = Crypto.charenc.Binary.stringToBytes(username + ":" + password);
-        var base64 = Crypto.util.bytesToBase64(bytes);
-        xhr.setRequestHeader("Authorization", "Basic " + base64);
-      },
-      error : function(xhr, ajaxOptions, thrownError) {
 
-      },
-      success : function(data) {
-        if (data.token) {
-          window.loginToken = data.token;
-          if (window.localStorage) {
-            localStorage['loginToken'] = data.token;
-          }
+    var success = function(data) {
+      if (data.token) {
+        window.loginToken = data.token;
+        if (window.localStorage) {
+          localStorage['loginToken'] = data.token;
         }
-
-        if (data.error == undefined) {
-            aw.cache.set('current_user_' + window.loginToken, data, 60);
-        }
-
-        aw.ui.login.updateView();
-        callback(data);
       }
-    });
+
+      if (data.error == undefined) {
+        aw.cache.set('current_user_' + window.loginToken, data, 60);
+      }
+
+      aw.ui.login.updateView();
+      callback(data);
+    };
+
+    if ($.browser.msie) {
+      $.ajax({
+        url : 'login',
+        type: 'POST',
+        data: {
+          username: username,
+          password: password
+        },
+        dataType : 'json',
+        success : success
+      });
+    } else {
+      $.ajax({
+        url : 'login',
+        dataType : 'json',
+        'beforeSend' : function(xhr) {
+          var bytes = Crypto.charenc.Binary.stringToBytes(username + ":" + password);
+          var base64 = Crypto.util.bytesToBase64(bytes);
+
+          xhr.setRequestHeader("Authorization", "Basic " + base64);
+        },
+        error : function(xhr, ajaxOptions, thrownError) {
+
+        },
+        success : success
+      });
+    }
+
+
   };
 
   stats.register = function (username, password1, password2, email, callback) {

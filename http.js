@@ -12,6 +12,7 @@ function defineRoutesAndMiddleware(app) {
 
   app.enable("jsonp callback");
   app.use(express.static(__dirname + '/site'));
+  app.use(express.bodyParser());
 // TODO SOME KIND OF TOKEN FOR ALL THE ROUTES
 
   app.get('/feed', geoip(), middlewares.feed.feed())
@@ -34,6 +35,7 @@ function defineRoutesAndMiddleware(app) {
   app.get('/round/:id', middlewares.round.loader(true));
 
   app.get('/login', middlewares.pilot.login(true));
+  app.post('/login', middlewares.pilot.login(true));
 
   app.get('/info', geoip(), function (req, res) {
     var response = {};
