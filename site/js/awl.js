@@ -8,7 +8,7 @@
 
   awl._loadPlugin = function () {
     this.plugin = $('<object id="awl" type="application/x-assaultwinglauncher" width="1" height="1"></object>');
-    $('head').append(this.plugin);
+    $('body').append(this.plugin);
   };
 
   awl.isPluginLoaded = function () {
@@ -81,8 +81,12 @@
     for (key in params) {
       kvps.push(key + "=" + params[key]);
     }
+    if (document.getElementById('awl').start) {
+      document.getElementById('awl').start(kvps.join('&'));
+      return true;
+    }
 
-    document.awl.start(kvps.join('&'));
+    return false;
   };
 
   if (window.aw == undefined) {
