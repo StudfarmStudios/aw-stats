@@ -120,7 +120,7 @@
 
       var currentIds = Object.keys(serverElements);
       $.each(currentIds, function (indx, id) {
-        if (!$.inArray(id, serverIds)) {
+        if ($.inArray(id, serverIds) == -1) {
           serverElements[id].remove();
         }
       });
