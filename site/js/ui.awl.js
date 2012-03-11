@@ -2,6 +2,7 @@
 
   var equipmentModal;
   var pluginNotFoundModal;
+  var autoPlayModal;
 
   //var weapons = ["bazooka", "rockets", "hovermine"];
   //var mods = ["blink", "repulsor", "catmoflage"];
@@ -46,9 +47,47 @@
   awl.pluginNotFoundError = function () {
     pluginNotFoundModal = $(tmpl('awl-plugin-not-found-template', {}));
     pluginNotFoundModal.modal("show");
+
+
+    pluginNotFoundModal.on('hidden', function () {
+      pluginNotFoundModal.remove();
+    });
   };
 
-  awl.equipment = function (server, user, cb) {
+  awl.autoPlay = function () {
+    if (aw.awl.isPluginInstalled()) {
+      autoPlayModal = $(tmpl('awl-auto-play-template', {}));
+      autoPlayModal.modal("show");
+
+      autoPlayModal.find('.start-auto-play').click(function (e) {
+        e.preventDefault();
+        autoPlayModal.modal("hide");
+        aw.ui.login.dialog(function (user) {
+          if (user.error) {
+
+
+            return;
+          }
+          aw.ui.awl.equipment("Auto Play", 'Enable', user, function (equipment) {
+            if (equipment.error) {
+              return;
+            }
+            aw.awl.enableAutoPlay(user, equipment);
+          });
+        });
+
+      });
+
+      autoPlayModal.on('hidden', function () {
+        autoPlayModal.remove();
+      });
+
+    } else {
+      this.pluginNotFoundError();
+    }
+  };
+
+  awl.equipment = function (title, buttonText, user, cb) {
 
     var callback = function (data) {
       if (cb) {
@@ -69,7 +108,7 @@
       });
     });
 
-    equipmentModal = $(tmpl('awl-equipment-template', {server: server, equipment: equipment}));
+    equipmentModal = $(tmpl('awl-equipment-template', {title: title, equipment: equipment, buttonText: buttonText}));
     equipmentModal.modal("show");
 
     equipmentModal.find('.previous-equipment a, .next-equipment a').click(function (e) {
@@ -204,7 +243,7 @@
 
           return;
         }
-        aw.ui.awl.equipment(server, user, function (equipment) {
+        aw.ui.awl.equipment("Joining " + server.name, 'Join', user, function (equipment) {
           if (equipment.error) {
             return;
           }
@@ -213,7 +252,7 @@
                   alert(joinInfo.fail);
                   return;
                 }
-                
+
                 var params = {
                   quickstart:"",
                   server_name:server.name,

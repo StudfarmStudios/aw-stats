@@ -100,7 +100,6 @@
     pilotList = content.find('.pilot-table');
     pagination = content.find('ul');
     searchForm = $('.container .content .pilots-search');
-    console.log(searchForm);
 
     $('.nav li').removeClass('active');
     $('.nav .pilots').addClass('active');

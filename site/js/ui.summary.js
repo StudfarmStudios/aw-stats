@@ -7,6 +7,8 @@
       ratingList,
       serverList;
 
+  var serverUpdateTimeout;
+
   var contentHtml = document.getElementById('summary-content-template').innerHTML;
   var pilotHtml = document.getElementById('summary-pilot-template').innerHTML;
   var serverHtml = document.getElementById('summary-server-template').innerHTML;
@@ -87,6 +89,12 @@
           aw.ui.awl.join(server);
           e.preventDefault();
         });
+
+        content.find('.auto-play a').unbind().click(function (e) {
+          aw.ui.awl.autoPlay();
+          e.preventDefault();
+        });
+
       }
 
       $.each(servers, function (indx, server) {
@@ -109,13 +117,14 @@
     });
 
 
-    setTimeout(function () {
+    serverUpdateTimeout = setTimeout(function () {
       constructServerList();
     }, 1000 * 15);
 
   }
 
   var summary = function () {
+    serverElements = {};
     content = $(contentHtml);
     pilotList = content.find('.pilot-list');
     showMorePilots = content.find('.more-pilots');
@@ -129,6 +138,15 @@
     constructPilotList();
     constructRankings();
     constructServerList();
+
+    
+    return {
+      cleanup: function () {
+        serverElements = {};
+        clearTimeout(serverUpdateTimeout);
+      }
+    };
+    
   };
 
   if (window.aw == undefined) {

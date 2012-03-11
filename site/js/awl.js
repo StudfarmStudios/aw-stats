@@ -74,15 +74,83 @@
     }
 
 
-
-
     return false;
+  };
+
+  awl._autoPlayServerCheck = function () {
+    if (!awl.autoPlay) {
+      return;
+    }
+
+    window.aw.stats.api('/server/list', {}, function (servers) {
+          if (!awl.autoPlay) {
+            return;
+          }
+
+          for (var i = 0; i < servers.length; i++) {
+            var server = servers[i];
+            if (server.currentclients > 0 && server.currentclients < server.maxclients) {
+              aw.stats.api('/server/' + server.id + '/join', {}, function (joinInfo) {
+                    if (joinInfo.fail) {
+                      alert(joinInfo.fail);
+                      return;
+                    }
+
+                    var equipment = awl.autoPlayEquipment;
+                    var user = awl.autoPlayUser;
+
+                    var params = {
+                      quickstart:"",
+                      server_name:server.name,
+                      server: joinInfo.server + "," + joinInfo.server2,
+                      login_token: user.token,
+                      ship: equipment.ship,
+                      mod: equipment.mod,
+                      weapon: equipment.weapon
+                    };
+
+                    if (!awl.autoPlay) {
+                      return;
+                    }
+
+                    aw.awl.start(params);
+                  });
+            }
+          }
+
+          awl._autoPlayTimeout = setTimeout(function () {
+            awl._autoPlayServerCheck();
+          }, 1000 * 15);
+        });
+
+  };
+
+  awl.enableAutoPlay = function (user, equipment) {
+    awl.autoPlay = true;
+    awl.autoPlayUser = user;
+    awl.autoPlayEquipment = equipment;
+    $('.disable-auto-play').show();
+    $('.disable-auto-play').unbind().click(function (e) {
+      e.preventDefault();
+      awl.disableAutoPlay();
+    });
+    awl._autoPlayServerCheck();
+  };
+
+  awl.disableAutoPlay = function () {
+    awl.autoPlay = false;
+    awl.autoPlayUser = null;
+    awl.autoPlayEquipment = null;
+    clearTimeout(awl._autoPlayTimeout);
+    $('.disable-auto-play').hide();
   };
 
   awl.start = function (params) {
     if (!this.isPluginInstalled() || !this.isPluginLoaded()) {
       return false;
     }
+
+    awl.disableAutoPlay();
 
     var kvps = [];
     var key;
