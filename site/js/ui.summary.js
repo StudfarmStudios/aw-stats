@@ -78,7 +78,7 @@
     window.aw.stats.api('/server/list', {}, function (servers) {
 
       if (servers.length > 0) {
-        var server;
+        var server = servers[0];
         for (var i = 0; i < servers.length; i++) {
           if (servers[i].currentclients < servers[i].maxclients) {
             server = servers[i];
