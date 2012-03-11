@@ -85,12 +85,12 @@
             break;
           }
         }
-        content.find('.play-now a').unbind().click(function (e) {
+        content.find('.play-now a').unbind("click").click(function (e) {
           aw.ui.awl.join(server);
           e.preventDefault();
         });
 
-        content.find('.auto-play a').unbind().click(function (e) {
+        content.find('.auto-play a').unbind("click").click(function (e) {
           aw.ui.awl.autoPlay();
           e.preventDefault();
         });
@@ -113,6 +113,12 @@
             aw.ui.awl.join(server);
             e.preventDefault();
           });
+
+          serverElement.find('.join').popover({
+            title: "Join",
+            content: "Join the server and play online."
+          });
+
         }
 
         serverElement.find('.server-current').html(server.currentclients);
@@ -126,9 +132,6 @@
       });
           
     });
-
-
-
 
     serverUpdateTimeout = setTimeout(function () {
       constructServerList();
@@ -151,6 +154,18 @@
     constructPilotList();
     constructRankings();
     constructServerList();
+
+    content.find('.play-now a').popover({
+      title: "Quick Play",
+      content: "Don't know which server to select? Quick Play will do it for you.",
+      placement: 'left'
+    });
+
+    content.find('.auto-play a').popover({
+      title: "Auto Play",
+      content: "Auto Play lets Assault Wing automatically start when other pilots join a server.",
+      placement: 'left'
+    });
 
     
     return {
