@@ -205,6 +205,9 @@
           return;
         }
         aw.ui.awl.equipment(server, user, function (equipment) {
+          if (equipment.error) {
+            return;
+          }
           aw.stats.api('/server/' + server.id + '/join', {}, function (joinInfo) {
                 if (joinInfo.fail) {
                   alert(joinInfo.fail);
