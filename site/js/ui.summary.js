@@ -74,7 +74,13 @@
     window.aw.stats.api('/server/list', {}, function (servers) {
 
       if (servers.length > 0) {
-        var server = servers[0];
+        var server;
+        for (var i = 0; i < servers.length; i++) {
+          if (servers[i].currentclients < servers[i].maxclients) {
+            server = servers[i];
+            break;
+          }
+        }
         content.find('.play-now a').click(function (e) {
           aw.ui.awl.join(server);
           e.preventDefault();
