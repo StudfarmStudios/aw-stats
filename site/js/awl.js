@@ -90,7 +90,7 @@
       kvps.push(key + "=" + params[key]);
     }
     if (document.getElementById('awl').start) {
-      document.getElementById('awl').start(kvps.join('&'));
+      document.getElementById('awl').start(encodeURIComponent(kvps.join('&')));
       return true;
     }
 
