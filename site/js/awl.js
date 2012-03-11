@@ -29,6 +29,12 @@
 
   awl.isPluginInstalled = function () {
 
+    if (this.isPluginLoaded()) {
+      if (document.getElementById('awl').version == "1.0.0.0") {
+        return false;
+      }
+    }
+
     var mimeTypes = navigator.mimeTypes;
 
     if (mimeTypes) {
@@ -63,9 +69,11 @@
         var plugin = new ActiveXObject('StudfarmStudios.AssaultWingLauncher');
         return true;
       } catch (e) {
-        alert(e);
+
       }
     }
+
+
 
 
     return false;
