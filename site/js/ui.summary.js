@@ -11,6 +11,8 @@
   var pilotHtml = document.getElementById('summary-pilot-template').innerHTML;
   var serverHtml = document.getElementById('summary-server-template').innerHTML;
 
+  var serverElements = {};
+
   function roundNumber(num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 	  return result;
@@ -81,24 +83,36 @@
             break;
           }
         }
-        content.find('.play-now a').click(function (e) {
+        content.find('.play-now a').unbind().click(function (e) {
           aw.ui.awl.join(server);
           e.preventDefault();
         });
       }
 
       $.each(servers, function (indx, server) {
-        var serverElement = $(serverHtml);
-        serverElement.find('.server-name').html(server.name);
+
+        var serverElement = serverElements[server.id];
+        if (serverElement == undefined) {
+          serverElement = $(serverHtml);
+          serverElements[server.id] = serverElement;
+          serverList.append(serverElement);
+          serverElement.find('.server-name').html(server.name);
+          serverElement.find('.server-limit').html(server.maxclients);
+          serverElement.find('.join').click(function (e) {
+            aw.ui.awl.join(server);
+            e.preventDefault();
+          });
+        }
+
         serverElement.find('.server-current').html(server.currentclients);
-        serverElement.find('.server-limit').html(server.maxclients);
-        serverElement.find('.join').click(function (e) {
-          aw.ui.awl.join(server);
-          e.preventDefault();
-        });
-        serverList.append(serverElement);
       })
     });
+
+
+    setTimeout(function () {
+      constructServerList();
+    }, 1000 * 30);
+
   }
 
   var summary = function () {
