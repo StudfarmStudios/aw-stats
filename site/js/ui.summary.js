@@ -162,8 +162,8 @@
     });
 
     content.find('.auto-play a').popover({
-      title: "Auto Play",
-      content: "Auto Play lets Assault Wing automatically start when other pilots join a server.",
+      title: "Wait And Play",
+      content: "Wait And Play lets Assault Wing automatically start when other pilots join a server.",
       placement: 'left'
     });
 

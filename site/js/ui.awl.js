@@ -68,7 +68,7 @@
 
             return;
           }
-          aw.ui.awl.equipment("Auto Play", 'Enable', user, function (equipment) {
+          aw.ui.awl.equipment("Wait And Play", 'Enable', user, function (equipment) {
             if (equipment.error) {
               return;
             }
