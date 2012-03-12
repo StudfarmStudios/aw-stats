@@ -493,10 +493,57 @@
 <!--[if lt IE 9]>
 <script src="js/3rdparty/html5.js"></script>
 <![endif]-->
-<script src="build/js.js?_=1"></script>
+<script src="js/3rdparty/jquery.min.js"></script>
+<script src="js/3rdparty/2.5.3-crypto-min.js?_=123"></script>
+<script src="js/3rdparty/bootstrap.min.js"></script>
+<script src="js/3rdparty/jquery.observehashchange.min.js"></script>
+<script src="js/utils.js?_=123"></script>
+<script src="js/cache.js?_=123"></script>
+<script src="js/stats.js?_=123"></script>
+<script src="js/awl.js?_=123"></script>
+<script src="js/ui.index.js?_=123"></script>
+<script src="js/ui.login.js?_=123"></script>
+<script src="js/ui.summary.js?_=124"></script>
+<script src="js/ui.register.js?_=123"></script>
+<script src="js/ui.rounds.js?_=123"></script>
+<script src="js/ui.round.js?_=123"></script>
+<script src="js/ui.pilots.js?_=153"></script>
+<script src="js/ui.pilot.js?_=123"></script>
+<script src="js/ui.notfound.js?_=123"></script>
+<script src="js/ui.awl.js?_=123"></script>
+<script type="text/javascript">
+    aw.awl.init();
+    $(function () {
+        function processHash() {
+            var hash = window.location.hash || "#!/summary";
+            if (hash == "#" || hash == "#!" || hash == "#!/") {
+                hash = "#!/summary";
+            }
+            var parts = hash.split('/');
+            var view = parts[1];
+
+            if (window.currentView && window.currentView.cleanup) {
+                window.currentView.cleanup();
+            }
+
+            if (window.aw.ui[view] && typeof window.aw.ui[view] === 'function') {
+                window.currentView = window.aw.ui[view](hash);
+            } else {
+                window.currentView = window.aw.ui.notfound(hash);
+            }
+        }
+
+        $(window).hashchange(processHash);
+        processHash();
+
+        aw.ui.login.init();
+
+    });
+</script>
 
 <!-- Le styles -->
-<link rel="stylesheet" href="build/css.css?_=1">
+<link rel="stylesheet" href="build/css.css">
+
 
 <!-- Le fav and touch icons -->
 </head>
