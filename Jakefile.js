@@ -16,7 +16,7 @@ var js = {
   'site/build/js.js': [
     "site/js/3rdparty/jquery.min.js",
     "site/js/3rdparty/2.5.3-crypto-min.js",
-    "site/js/3rdparty/bootstrap.min.js",
+    "site/js/3rdparty/bootstrap.js",
     "site/js/3rdparty/jquery.observehashchange.min.js",
     "site/js/utils.js",
     "site/js/cache.js",
