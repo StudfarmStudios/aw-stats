@@ -6,7 +6,7 @@
     cache.data[key] = data;
     if (ttl && ttl > 0) {
       setTimeout(function () {
-        delete self.del(key);
+        self.del(key);
       }, ttl * 1000);
     }
   };
