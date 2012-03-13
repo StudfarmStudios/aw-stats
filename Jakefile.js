@@ -100,6 +100,10 @@ function processCssTarget(target, files) {
 function processJSTarget(target, files) {
   var data = joinFiles(files);
   data = '(function(window, undefined){' + data + '})(window);\n'
+  if (process.env.QUICK && (process.env.QUICK == 1 || process.env.QUICK == "true")) {
+    saveTarget(target, data);
+    return;
+  }
   closureCompiler(data, {}, function (err, result) {
         console.log(err);
         saveTarget(target, result);
