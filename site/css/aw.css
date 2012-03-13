@@ -178,3 +178,7 @@ footer {
 .popover-content, .popover-title {
     color: #000000
 }
+
+.pilot-count {
+    text-align: center;
+}

@@ -98,6 +98,7 @@
       }
 
       var serverIds = [];
+      var playersOnline = 0;
       $.each(servers, function (indx, server) {
 
         serverIds.push(server.id);
@@ -121,6 +122,8 @@
 
         }
 
+        playersOnline += server.currentclients;
+
         serverElement.find('.server-current').html(server.currentclients);
       });
 
@@ -130,7 +133,7 @@
           serverElements[id].remove();
         }
       });
-          
+      content.find('.pilot-count').html("<h2>Players online</h2><h3>"+ playersOnline +"</h3>");
     });
 
     serverUpdateTimeout = setTimeout(function () {
