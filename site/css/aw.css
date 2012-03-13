@@ -25,7 +25,7 @@ html, body {
 }
 
 .play-now .btn, .auto-play .btn {
-    width: 160px;
+    width: 170px;
     padding: 20px 80px;
     font-size: 25px;
     line-height: normal;
@@ -131,10 +131,6 @@ input:focus, textarea:focus {
 
 footer {
     margin-top: 30px;
-}
-
-.show-when-logged-in, .show-when-logged-out {
-    display: none;
 }
 
 .equipment-selector .not-selected-equipment {
