@@ -38,11 +38,11 @@ setTimeout(function () {
       var message = new Buffer("operation=updateserver;currentclients=1");
       client.send(message, 0, message.length, 3003, "127.0.0.1");
 
-      setTimeout(function () {
+      setInterval(function () {
          console.log("List");
         var message = new Buffer("operation=listservers");
         client.send(message, 0, message.length, 3003, "127.0.0.1");
-
+/**
         setTimeout(function () {
            console.log("Remove");
           var message = new Buffer("operation=removeserver");
@@ -57,6 +57,7 @@ setTimeout(function () {
         }, 1000);
 
         }, 1000);
+ **/
 
       }, 1000);
 

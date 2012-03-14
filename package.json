@@ -17,6 +17,7 @@
      "connect-geoip" : "0.0.2",
      "brain" : "0.3.6",
      "socket.io" : "0.8.7",
-     "uglifycss" : "0.0.5"
+     "uglifycss" : "0.0.5",
+     "redis" : "0.7.1"
  }
 }
