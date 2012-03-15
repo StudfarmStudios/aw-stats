@@ -1,7 +1,7 @@
 var middlewares = require('./lib/middleware/master');
 var serverprovider = require('./lib/repositories/server');
 
-var server = require('./lib/masterserver').createMasterServer({port: 3003});
+var server = require('./lib/masterserver').createMasterServer({port: 16728});
 
 server.register('addserver', middlewares.add());
 server.register('joinserver', middlewares.join());
@@ -23,6 +23,6 @@ setInterval(function () {
     });
 
   });
-}, 5000);
+}, 20000);
 
 server.listen();
