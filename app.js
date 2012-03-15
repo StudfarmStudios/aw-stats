@@ -9,6 +9,7 @@ if (cluster.isMaster) {
   var announcementServer = require('./lib/announcementserver');
   var irc = require('./lib/irc');
   var cron = require('./lib/cron');
+  var masterserver = require('./masterserver');
   //var socketio = require('./lib/socketio');
   var workers = [];
   var fork = function () {
