@@ -8,6 +8,7 @@ server.register('joinserver', middlewares.join());
 server.register('removeserver', middlewares.remove());
 server.register('updateserver', middlewares.update());
 server.register('listservers', middlewares.list(true));
+server.register('pong', middlewares.pong());
 
 setInterval(function () {
   serverprovider.getServers(function (err, gameServers) {
