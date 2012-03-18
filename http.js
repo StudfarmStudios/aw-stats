@@ -152,6 +152,7 @@ io.sockets.on('connection', function (socket) {
         io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
         socket.removeAllListeners('pilot_waiting');
         socket.removeAllListeners('pilot_not_waiting');
+        socket.removeAllListeners('pilot_joining');
       });
 
       socket.on('disconnect', function () {
