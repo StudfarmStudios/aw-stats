@@ -94,5 +94,9 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.pilot = pilot;
+  if (window.aw.ui.view == undefined) {
+    window.aw.ui.view = {};
+  }
+
+  window.aw.ui.view.pilot = pilot;
 })(window);

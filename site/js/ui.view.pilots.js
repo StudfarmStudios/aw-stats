@@ -122,5 +122,9 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.pilots = pilots;
+  if (window.aw.ui.view == undefined) {
+    window.aw.ui.view = {};
+  }
+
+  window.aw.ui.view.pilots = pilots;
 })(window);

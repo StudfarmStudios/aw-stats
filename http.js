@@ -2,6 +2,11 @@ var express = require('express');
 var middlewares = require('./lib/middleware/http');
 var fs = require('fs');
 var geoip = require('connect-geoip').geoip;
+var repositories = require('./lib/repositories');
+
+var redisevents = require('./lib/rediseventemitter');
+var emitter = new redisevents.EventEmitter("server_info");
+
 
 var options = {
   key: fs.readFileSync(__dirname + '/key.pem'),
@@ -52,10 +57,129 @@ function defineRoutesAndMiddleware(app) {
     }
     res.send(response);
   });
+
 }
 
 var app = express.createServer();
 defineRoutesAndMiddleware(app);
+
+var sio = require('socket.io')
+    , RedisStore = sio.RedisStore
+    , io = sio.listen(app);
+
+// Somehow pass this information to the workers
+io.set('store', new RedisStore());
+
+
+repositories.waitandplay.removeAll();
+// Do the work here
+
+var clients = [];
+
+clients.emit = function () {
+  var args = Array.prototype.slice.call(arguments);
+
+  this.forEach(function (client) {
+    client.emit.apply(client, args);
+  });
+
+};
+
+io.sockets.on('connection', function (socket) {
+  clients.push(socket);
+  console.log("Socket connected");
+  socket.on('auth', function (token) {
+    console.log("Client auth with token " + token);
+    var waitAndPlays = [];
+    repositories.pilot.getPilotByToken(token, function (err, pilot) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      io.sockets.emit('pilot_logged_in', {_id: pilot._id, username: pilot.username});
+      console.log(pilot.username + " auth socket session");
+      socket.on('pilot_joining', function (server) {
+        io.sockets.emit('pilot_joining', {_id: pilot._id, username: pilot.username}, server);
+      });
+      socket.on('pilot_waiting', function (server) {
+        io.sockets.emit('pilot_added_to_wait_and_play', {_id: pilot._id, username: pilot.username}, server);
+        waitAndPlays.push(server.id);
+        repositories.waitandplay.addWaitAndPlay(server.id, pilot._id);
+
+        repositories.server.getServer(server.id, function (err, server) {
+          if (err || server == null || server.id == undefined) {
+            return;
+          }
+          clients.emit('server_update', {
+            id: server.id,
+            name: server.name,
+            waiting: server.waiting || 0,
+            currentclients: Number(server.currentclients),
+            maxclients: Number(server.maxclients)
+          });
+        });
+
+      });
+      socket.on('pilot_not_waiting', function (server) {
+        io.sockets.emit('pilot_removed_from_wait_and_play', {_id: pilot._id, username: pilot.username}, server);
+        repositories.waitandplay.removeWaitAndPlay(server.id, pilot._id, function (err) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          waitAndPlays = waitAndPlays.filter(function (serverId) {
+            return !(serverId == server.id);
+          });
+
+          repositories.server.getServer(server.id, function (err, server) {
+          if (err || server == null || server.id == undefined) {
+            return;
+          }
+          clients.emit('server_update', {
+            id: server.id,
+            name: server.name,
+            waiting: server.waiting || 0,
+            currentclients: Number(server.currentclients),
+            maxclients: Number(server.maxclients)
+          });
+        });
+
+        });
+      });
+
+      socket.on('logout', function () {
+        console.log(pilot.username + " logged out");
+        io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
+        socket.removeAllListeners('pilot_waiting');
+        socket.removeAllListeners('pilot_not_waiting');
+      });
+
+      socket.on('disconnect', function () {
+        clients.splice(clients.indexOf(socket), 1);
+        io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
+        waitAndPlays.forEach(function (serverId) {
+          repositories.waitandplay.removeWaitAndPlay(serverId, pilot._id);
+        });
+      });
+    });
+  });
+});
+
+emitter.on('server_update', function (server) {
+  clients.emit('server_update', server);
+});
+
+emitter.on('server_remove', function (server) {
+  clients.emit('server_remove', server);
+});
+
+emitter.on('server_add', function (server) {
+  clients.emit('server_add', server);
+});
+
+
+app.io = io;
+
 app.listen(3001, function (err) {
   if (err) {
     return console.log(err.message);

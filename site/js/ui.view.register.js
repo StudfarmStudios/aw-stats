@@ -50,5 +50,9 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.register = register;
+  if (window.aw.ui.view == undefined) {
+    window.aw.ui.view = {};
+  }
+
+  window.aw.ui.view.register = register;
 })(window);

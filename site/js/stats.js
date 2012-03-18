@@ -144,6 +144,7 @@
       localStorage.removeItem('loginToken');
     }
     aw.ui.login.updateView();
+    aw.socket.emit('logout');
   };
 
   stats.getUser = function (callback) {
@@ -174,6 +175,7 @@
         if (window.localStorage) {
           localStorage['loginToken'] = data.token;
         }
+        aw.socket.emit('auth', data.token);
       }
 
       if (data.error == undefined) {

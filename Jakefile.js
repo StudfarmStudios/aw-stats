@@ -22,16 +22,18 @@ var js = {
     "site/js/cache.js",
     "site/js/stats.js",
     "site/js/awl.js",
+    "site/js/ui.js",
     "site/js/ui.index.js",
     "site/js/ui.login.js",
-    "site/js/ui.summary.js",
-    "site/js/ui.register.js",
-    "site/js/ui.rounds.js",
-    "site/js/ui.round.js",
-    "site/js/ui.pilots.js",
-    "site/js/ui.pilot.js",
-    "site/js/ui.notfound.js",
+    "site/js/ui.view.summary.js",
+    "site/js/ui.view.register.js",
+    "site/js/ui.view.rounds.js",
+    "site/js/ui.view.round.js",
+    "site/js/ui.view.pilots.js",
+    "site/js/ui.view.pilot.js",
+    "site/js/ui.view.notfound.js",
     "site/js/ui.awl.js",
+    "site/js/communication.js",
     "site/js/init.js"
   ]
 };
@@ -134,4 +136,47 @@ task('build-js', [], function () {
   for (target in js) {
     processJSTarget(target, js[target]);
   }
+});
+
+desc('Watch');
+task('watch', ["build"], function () {
+  var target;
+  for (target in js) {
+    (function (target) {
+      var files = js[target];
+      files.forEach(function (file) {
+        fs.watchFile(__dirname + "/" + file, { interval:200 }, function (curr, prev) {
+              if (prev.nlink === 0 && curr.nlink !== 0) {
+                console.log(file + " changed, rebuilding");
+                processJSTarget(target, files);
+              } else if (curr.mtime > prev.mtime) {
+                console.log(file + " changed, rebuilding");
+                processJSTarget(target, files);
+              }
+
+            });
+      });
+    })(target);
+  }
+
+  // CSS
+
+  for (target in css) {
+    (function (target) {
+      var files = css[target];
+      files.forEach(function (file) {
+        fs.watchFile(__dirname + "/" + file, { interval:200 }, function (curr, prev) {
+              if (prev.nlink === 0 && curr.nlink !== 0) {
+                console.log(file + " changed, rebuilding");
+                processCssTarget(target, files);
+              } else if (curr.mtime > prev.mtime) {
+                console.log(file + " changed, rebuilding");
+                processCssTarget(target, files);
+              }
+
+            });
+      });
+    })(target);
+  }
+
 });

@@ -182,3 +182,13 @@ footer {
 .pilot-count {
     text-align: center;
 }
+
+.toaster {
+    right: 25px;
+    top: 50px;
+    position: fixed;
+}
+
+.toaster .popover-inner {
+    margin-bottom: 6px;
+}

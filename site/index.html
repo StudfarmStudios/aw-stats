@@ -5,7 +5,52 @@
 <title>Assault Wing - Galactic Battlefront</title>
 <meta name="description" content="">
 <meta name="author" content="Jaakko Lukkari">
+<script id="toaster-popup-template" type="text/template">
+    <div class="popover-inner">
+        <h3 class="popover-title"><%=title%><a class="close">&times;</a></h3>
+        <div class="popover-content">
+            <p><%=content%></p>
+        </div>
+    </div>
+</script>
+<script id="summary-wait-for-player" type="text/template">
+   <h2>Pilots online</h2><h3><%=(online+waiting)%></h3>
+</script>
+<script id="awl-wait-for-player-template" type="text/template">
+    <div class="modal fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
 
+            <h3 class="equipment-modal-title">You are now ready to play!</h3>
+        </div>
+
+        <div class="modal-body">
+            <% if (!full) { %>
+            <p>Currently there are no players playing. As soon as opponents arrive the game will start automatically.</p>
+            <div class="waiting-status">
+                <h4 class="waiting-title">Waiting for players</h4>
+                <div class="progress">
+                    <div class="bar"></div>
+                </div>
+            </div>
+            <p>The Bots are online and they can offer you some challenge if you want to play now.</p>
+            <a href="#" class="btn btn-success start-now">Play Now!</a>
+            <% } else { %>
+            <p>The server you have selected is currently full. As soon as the server will have room the game will start automatically.</p>
+            <div class="waiting-status">
+                <h4 class="waiting-title">Waiting</h4>
+                <div class="progress">
+                    <div class="bar"></div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <div class="modal-footer">
+            <a data-dismiss="modal" href="#" class="btn btn-danger">Cancel</a>
+        </div>
+
+    </div>
+</script>
 <script id="awl-equipment-template" type="text/template">
     <div class="modal fade">
         <div class="modal-header">
@@ -62,28 +107,6 @@
         </div>
         <div class="modal-footer">
             <a data-dismiss="modal" href="#" class="btn btn-success">Ok</a>
-        </div>
-
-    </div>
-</script>
-
-<script id="awl-auto-play-template" type="text/template">
-    <div class="modal fade">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-
-            <h3 class="equipment-modal-title">Forever Alone? Not for long!</h3>
-        </div>
-
-        <div class="modal-body">
-            Auto Play lets Assault Wing automatically start when other pilots join a server.
-            This will give you the power to continue surfing and doing other things while the servers are empty.
-            <br /><br />
-            The only thing you have to do is to keep this tab/browser open.
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-success start-auto-play">Ok</a>
-            <a data-dismiss="modal" href="#" class="btn btn-danger">Cancel</a>
         </div>
 
     </div>
@@ -444,6 +467,7 @@
                 <thead>
                 <th>Name</th>
                 <th>Current</th>
+                <th>Waiting</th>
                 <th>Limit</th>
                 </thead>
                 <tbody class="server-table"></tbody>
@@ -480,6 +504,7 @@
     <tr>
         <td class="server-name"></td>
         <td class="server-current"></td>
+        <td class="server-waiting"></td>
         <td class="server-limit"></td>
 
         <td class="server-action">
@@ -494,6 +519,7 @@
 <!--[if lt IE 9]>
 <script src="js/3rdparty/html5.js"></script>
 <![endif]-->
+<script src="socket.io/socket.io.js"></script>
 <script src="build/js.js?_1"></script>
 
 <!-- Le styles -->
@@ -504,7 +530,9 @@
 </head>
 
 <body>
+<div class="toaster">
 
+</div>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -548,7 +576,7 @@
         <!-- CONTENT END -->
     </div>
     <footer>
-        <p>Copyright &copy; 2011 Studfarm Studios</p>
+        <p>Copyright &copy; 2012 Studfarm Studios</p>
     </footer>
 
 </div>

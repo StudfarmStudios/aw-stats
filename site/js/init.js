@@ -12,10 +12,10 @@ $(function () {
       window.currentView.cleanup();
     }
 
-    if (window.aw.ui[view] && typeof window.aw.ui[view] === 'function') {
-      window.currentView = window.aw.ui[view](hash);
+    if (window.aw.ui.view[view] && typeof window.aw.ui.view[view] === 'function') {
+      window.currentView = window.aw.ui.view[view](hash);
     } else {
-      window.currentView = window.aw.ui.notfound(hash);
+      window.currentView = window.aw.ui.view.notfound(hash);
     }
   }
 
@@ -23,5 +23,6 @@ $(function () {
   processHash();
 
   aw.ui.login.init();
+  aw.ui.awl.init();
 
 });

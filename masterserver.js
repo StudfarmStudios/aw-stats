@@ -21,7 +21,7 @@ setInterval(function () {
       console.log("Sending operation=ping to " + gameServer.address + ":" + gameServer.port);
       server.sock.send(message, 0, message.length, gameServer.port, gameServer.address);
       gameServer.lastPingSent = (new Date()).getTime();
-      serverprovider.updateServer(gameServer);
+      serverprovider.updateServer(gameServer, true);
     });
 
   });

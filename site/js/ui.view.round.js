@@ -93,5 +93,9 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.round = round;
+  if (window.aw.ui.view == undefined) {
+    window.aw.ui.view = {};
+  }
+
+  window.aw.ui.view.round = round;
 })(window);

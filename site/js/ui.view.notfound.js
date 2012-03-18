@@ -18,5 +18,10 @@
     window.aw.ui = {};
   }
 
-  window.aw.ui.notfound = notfound;
+  if (window.aw.ui.view == undefined) {
+    window.aw.ui.view = {};
+  }
+
+
+  window.aw.ui.view.notfound = notfound;
 })(window);

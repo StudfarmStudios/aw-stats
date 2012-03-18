@@ -2,7 +2,7 @@
 
   var equipmentModal;
   var pluginNotFoundModal;
-  var autoPlayModal;
+  var waitForPlayersModal;
 
   //var weapons = ["bazooka", "rockets", "hovermine"];
   //var mods = ["blink", "repulsor", "catmoflage"];
@@ -44,6 +44,17 @@
 
   };
 
+  awl.init = function () {
+    aw.socket.on('pilot_added_to_wait_and_play', function (user, server) {
+      aw.ui.toaster({title: user.username + " waiting to play", content: '<a href="#!/pilot/' + user.username + '">' + user.username + '</a>' + ' is waiting for other pilots to play online (' + server.name + ')'});
+    });
+
+    aw.socket.on('pilot_joining', function (user, server) {
+      aw.ui.toaster({title: user.username + " is joining a server", content: '<a href="#!/pilot/' + user.username + '">' + user.username + '</a>' + ' is joining a server (' + server.name + ')'});
+    });
+
+  };
+
   awl.pluginNotFoundError = function () {
     pluginNotFoundModal = $(tmpl('awl-plugin-not-found-template', {}));
     pluginNotFoundModal.modal("show");
@@ -54,37 +65,88 @@
     });
   };
 
-  awl.autoPlay = function () {
-    if (aw.awl.isPluginInstalled()) {
-      autoPlayModal = $(tmpl('awl-auto-play-template', {}));
-      autoPlayModal.modal("show");
-
-      autoPlayModal.find('.start-auto-play').click(function (e) {
-        e.preventDefault();
-        autoPlayModal.modal("hide");
-        aw.ui.login.dialog(function (user) {
-          if (user.error) {
+  awl.waitForPlayers = function (user, server, cb) {
+    var callback = function (join) {
+      if (cb) {
+        cb(join);
+        cb = null;
+      }
+    };
 
 
-            return;
-          }
-          aw.ui.awl.equipment("Wait And Play", 'Enable', user, function (equipment) {
-            if (equipment.error) {
-              return;
-            }
-            aw.awl.enableAutoPlay(user, equipment);
-          });
-        });
+    waitForPlayersModal = $(tmpl('awl-wait-for-player-template', {full: (server.currentclient >= server.maxclients)}));
+    waitForPlayersModal.modal("show");
 
-      });
+    waitForPlayersModal.find('.start-now').click(function (e) {
+      e.preventDefault();
+      callback(true);
+      waitForPlayersModal.modal("hide");
+    });
 
-      autoPlayModal.on('hidden', function () {
-        autoPlayModal.remove();
-      });
 
-    } else {
-      this.pluginNotFoundError();
-    }
+    var serverUpdateListener = function (serv) {
+      if (server.id != serv.id) {
+        return;
+      }
+
+      if (serv.currentclients > 0 && serv.currentclients < serv.maxclients) {
+        aw.socket.removeListener('server_update', serverUpdateListener);
+        callback(true);
+        waitForPlayersModal.modal("hide");
+      }
+    };
+
+    aw.socket.on('server_update', serverUpdateListener);
+
+    var bar = waitForPlayersModal.find('.bar');
+    var waitingTitle = waitForPlayersModal.find('.waiting-title');
+    var title = waitingTitle.html();
+
+    var toggle = false;
+    var step = 0;
+    var half = false;
+    var animInterval = setInterval(function () {
+      if (half) {
+        if (toggle) {
+          bar.width("0%");
+          toggle = false;
+        } else {
+          bar.width("100%");
+          toggle = true;
+        }
+        half = false;
+      } else {
+        half = true;
+      }
+
+      if (step == 3) {
+        step = 0;
+      } else {
+        step++;
+      }
+
+      var dots = "";
+      for (var i = 0; i < step; i++) {
+        dots += ".";
+      }
+
+      waitingTitle.html(title + dots);
+
+    }, 500);
+
+    waitForPlayersModal.on('hidden', function () {
+      callback(false);
+      clearInterval(animInterval);
+      aw.socket.removeListener('server_update', serverUpdateListener);
+      waitForPlayersModal.remove();
+    });
+
+    return {
+      hide: function () {
+        waitForPlayersModal.modal("hide");
+      }
+    };
+
   };
 
   awl.equipment = function (title, buttonText, user, cb) {
@@ -262,8 +324,22 @@
                   mod: equipment.mod,
                   weapon: equipment.weapon
                 };
+                
+                 if (server.currentclients == 0 && (server.waiting || 0) == 0
+                 || server.currentclients == server.maxclients) {
 
-                aw.awl.start(params);
+                  aw.socket.emit('pilot_waiting', server);
+                  awl.waitForPlayers(user, server, function (join) {
+                    aw.socket.emit('pilot_not_waiting', server);
+                    if (join) {
+                      aw.socket.emit('pilot_joining', server);
+                      aw.awl.start(params);
+                    }
+                  });
+                } else {
+                  aw.socket.emit('pilot_joining', server);
+                  aw.awl.start(params);
+                }
               });
         });
       });
