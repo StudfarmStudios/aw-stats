@@ -5,6 +5,9 @@ if (numberOfWorkers > 4) {
   numberOfWorkers = 4;
 }
 
+//TEST SOMETHING
+numberOfWorkers = 1;
+
 if (cluster.isMaster) {
   var announcementServer = require('./lib/announcementserver');
   var irc = require('./lib/irc');
