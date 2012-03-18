@@ -27,11 +27,6 @@
   };
 
   awl.isPluginInstalled = function () {
-
-    //REMOVE IN DEVELOPMENT
-    return true;
-
-
     if (this.isPluginLoaded()) {
       if (document.getElementById('awl').version == "1.0.0.0") {
         return false;

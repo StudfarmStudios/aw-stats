@@ -2109,11 +2109,6 @@ $.observeHashChange();})(jQuery);
   };
 
   awl.isPluginInstalled = function () {
-
-    //REMOVE IN DEVELOPMENT
-    return true;
-
-
     if (this.isPluginLoaded()) {
       if (document.getElementById('awl').version == "1.0.0.0") {
         return false;
@@ -3530,8 +3525,7 @@ $.observeHashChange();})(jQuery);
 
 })(window);
 (function (window, undefined) {
-  var socket = io.connect();
-
+  var socket = io.connect("http://" + document.location.hostname +":3001");
   socket.on('connect', function () {
     if (window.loginToken) {
       socket.emit('auth', window.loginToken);
