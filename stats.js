@@ -5,7 +5,7 @@ var server = require('./lib/server').createServer(3000);
 // ALLOWED IPS
 server.allow('127.0.0.1');
 server.allow('62.75.224.66');
-server.allow('82.181.67.118');
+server.allow('82.181.247.216');
 
 // LOG EVERY REQUEST
 server.register({}, statsMiddlewares.log());
@@ -28,14 +28,12 @@ server.register(
 server.register(
     {AddPlayer: {$exists:true}},
     statsMiddlewares.getPilot('AddPlayer', '_pilot'),
-    //statsMiddlewares.getPilot('AddPlayer.LoginToken', '_pilot'),
     statsMiddlewares.commands.addPlayer()
 );
 
 server.register(
     {RemovePlayer: {$exists:true}},
     statsMiddlewares.getPilot('RemovePlayer', '_pilot'),
-    //statsMiddlewares.getPilot('RemovePlayer.LoginToken', '_pilot'),
     statsMiddlewares.commands.removePlayer()
 );
 
