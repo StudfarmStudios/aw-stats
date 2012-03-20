@@ -3,7 +3,7 @@ var middlewares = require('./lib/middleware/http');
 var fs = require('fs');
 var geoip = require('connect-geoip').geoip;
 var repositories = require('./lib/repositories');
-
+var settings = require('./lib/settings');
 var redisevents = require('./lib/rediseventemitter');
 var emitter = new redisevents.EventEmitter("server_info");
 
@@ -20,7 +20,7 @@ function defineRoutesAndMiddleware(app) {
   app.use(express.bodyParser());
 // TODO SOME KIND OF TOKEN FOR ALL THE ROUTES
 
-  app.get('/feed', geoip(), middlewares.feed.feed())
+  app.get('/feed', geoip(), middlewares.feed.feed());
 
   app.get('/ranking/top1', middlewares.ranking.top1(true));
 
@@ -181,7 +181,7 @@ emitter.on('server_add', function (server) {
 
 app.io = io;
 
-app.listen(3001, function (err) {
+app.listen(settings.httpPort, function (err) {
   if (err) {
     return console.log(err.message);
   }
@@ -191,7 +191,7 @@ app.listen(3001, function (err) {
 
 var secureApp = express.createServer(options);
 defineRoutesAndMiddleware(secureApp);
-secureApp.listen(3002, function (err) {
+secureApp.listen(settings.httpsPort, function (err) {
   if (err) {
     return console.log(err.message);
   }

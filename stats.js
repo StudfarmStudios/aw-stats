@@ -1,6 +1,8 @@
+var settings = require('./lib/settings');
+
 // STATS SERVER
 var statsMiddlewares = require('./lib/middleware/stats');
-var server = require('./lib/server').createServer(3000);
+var server = require('./lib/server').createServer(settings.statsPort);
 
 // ALLOWED IPS
 server.allow('127.0.0.1');
