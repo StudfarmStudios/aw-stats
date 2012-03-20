@@ -1,6 +1,6 @@
 var middlewares = require('./lib/middleware/master');
 var serverprovider = require('./lib/repositories/server');
-
+var settings = require('./lib/settings');
 var server = require('./lib/masterserver').createMasterServer({port: settings.masterServerPort});
 
 server.register('addserver', middlewares.add());
