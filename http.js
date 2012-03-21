@@ -38,6 +38,7 @@ function defineRoutesAndMiddleware(app) {
   app.get('/round/list', middlewares.round.list(true));
 
   app.get('/round/:id', middlewares.round.loader(true));
+  app.get('/round/:id/kills', middlewares.round.kills(true));
 
   app.get('/login', middlewares.pilot.login(true));
   app.post('/login', middlewares.pilot.login(true));
