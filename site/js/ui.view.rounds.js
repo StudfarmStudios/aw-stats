@@ -6,8 +6,6 @@
 
   var contentHtml = document.getElementById('rounds-content-template').innerHTML;
 
-  var roundHtml = document.getElementById('rounds-round-template').innerHTML;
-
 
   function createPageLink(page, limit, total) {
     if (page == 0) {
@@ -41,10 +39,6 @@
     window.aw.stats.rounds(page, limit, 'started', function (data) {
       createPagination(data.page, data.limit, data.total);
       $.each(data.rounds, function (indx, round) {
-        var roundElement = $(roundHtml);
-        roundElement.find('.round-arena').html('<a href="#!/round/' + round._id + '">' + round.arena.name + '</a>');
-        roundElement.find('.round-started').html(round.started);
-        roundElement.find('.round-ended').html(round.ended);
         var winners = "";
         var i, result;
         for (i = 0; i < round.results.length; i++) {
@@ -63,7 +57,15 @@
             winners += '<a href="#!/pilot/' + result.username + '">' + result.username + '</a>';
           }
         }
-        roundElement.find('.round-winner').html(winners + ' (<small>' + round.results[0].score + '</small>)');
+        var roundElement = $(tmpl('rounds-round-template', {
+          arena: round.arena.name,
+          id: round._id,
+          started: round.started,
+          ended: round.ended,
+          winner: winners,
+          score: round.results[0].score
+        }));
+
         roundList.append(roundElement);
       });
     });

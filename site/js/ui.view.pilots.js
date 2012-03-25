@@ -7,8 +7,6 @@
 
   var contentHtml = document.getElementById('pilots-content-template').innerHTML;
 
-  var pilotHtml = document.getElementById('pilots-pilot-template').innerHTML;
-
   function roundNumber (num, dec) {
 	  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 	  return result;
@@ -52,16 +50,14 @@
     var processData = function (data) {
       createPagination(data.page, data.limit, data.total, search);
       $.each(data.pilots, function (indx, pilot) {
-        var pilotElement = $(pilotHtml);
-        var username = pilot.username;
-        if (search && search !=  "") {
-          username = username.replace(new RegExp(search, 'g'), "<b>" + search + "</b>");
-        }
-        pilotElement.find('.pilot-name').html('<a href="#!/pilot/' + pilot.username + '">' + username + '</a>');
-        pilotElement.find('.pilot-rating').html(Math.round(pilot.rating || 1500));
-        pilotElement.find('.pilot-score').html(pilot.score);
-        pilotElement.find('.pilot-flight-time').html(hoursToTime(pilot.playTime || 0));
 
+        var pilotElement = $(tmpl('pilots-pilot-template', {
+          username: pilot.username,
+          rating: Math.round(pilot.rating || 1500),
+          score: pilot.score,
+          flightTime: hoursToTime(pilot.playTime || 0)
+        }));
+        
         pilotList.append(pilotElement);
       });
     };

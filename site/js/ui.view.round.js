@@ -3,10 +3,11 @@
   var content,
       id,
       round,
-      scores;
+      scores,
+      idToUsernameMap,
+      kills;
 
   var contentHtml = document.getElementById('round-content-template').innerHTML;
-  var scoreHtml = document.getElementById('round-score-template').innerHTML;
 
   function constructRoundScoreList () {
     var posPerScore = {};
@@ -19,31 +20,34 @@
         posPerScore[result.score] = pos;
       }
     }
-
+    idToUsernameMap = {};
     $.each(round.results, function (indx, res) {
-      var element = $(scoreHtml);
-      if (res.anon) {
-        element.find('.username').html(res.username + ' <span class="label notice">Not registered</span>');
-      } else {
-        element.find('.username').html('<a href="#!/pilot/' + res.username + '">' + res.username + '</a>');
-        var rDelta = Math.round(res.newRating - res.oldRating);
-        if (rDelta != 0) {
-          element.find('.rating').html( ((rDelta >= 0)? " + " : "") +  rDelta + " ( " + Math.round(res.newRating) + " ) " );
-        }
-
+      if (res._id) {
+        idToUsernameMap[res._id] = res.username;
       }
 
-        element.find('.position').html(posPerScore[res.score] + '.');
-        element.find('.kills').html(res.kills);
-        element.find('.deaths').html(res.deaths);
-        element.find('.suicides').html(res.suicides);
-        element.find('.score').html(res.score);
+      if (!res.anon) {
+        res.anon = false;
+      }
 
-
+      res.rating = Math.round(res.newRating - res.oldRating);
+      res.position = posPerScore[res.score];
+      var element = $(tmpl('round-score-template', res));
       scores.append(element);
     });
 
+    constructKillInfoList();
+  }
 
+  function constructKillInfoList () {
+    window.aw.stats.roundKills(id, function (data) {
+      if (data.error != undefined) {
+        return;
+      }
+
+      var killTable = $(tmpl('round-kill-template', {killData: {kassu:{kessu:1}, kessu:{kassu:0}}}));
+      kills.append(killTable);
+    });
   }
 
   function constructRoundInfoTable () {
@@ -76,6 +80,7 @@
     id = parts.pop();
     content = $(contentHtml);
     scores = content.find('.result-table');
+
     $('.container .content').html(content);
     $('.page-header h1').html("Round <small>" + id + "</small>");
     window.aw.stats.round(id, function (data) {

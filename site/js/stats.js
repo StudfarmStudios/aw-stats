@@ -79,6 +79,21 @@
         });
   };
 
+  stats.roundKills = function (id, callback) {
+    var key = 'round_kills_' + id;
+    var cachedData = aw.cache.get(key);
+    if (cachedData) {
+      return callback(cachedData);
+    }
+    this.api('/round/' + id + '/kills', {}, function (data) {
+          if (data.error == undefined) {
+            aw.cache.set(key, data, 60);
+          }
+
+          callback(data);
+        });
+  };
+
   stats.roundsForPilot = function (page, limit, sort, id, callback) {
     var key = 'round_' + page + '_' + limit + '_' + sort + '_' + id;
     var cachedData = aw.cache.get(key);

@@ -303,10 +303,10 @@
 
 <script id="pilots-pilot-template" type="text/template">
     <tr>
-        <td class="pilot-name"></td>
-        <td class="pilot-rating"></td>
-        <td class="pilot-score"></td>
-        <td class="pilot-flight-time"></td>
+        <td><a href="#!/pilot/<%= username %>"><%= username %></a></td>
+        <td><%= rating %></td>
+        <td><%= score %></td>
+        <td><%= flightTime %></td>
     </tr>
 </script>
 
@@ -408,20 +408,41 @@
         </thead>
         <tbody class="result-table"></tbody>
     </table>
-
-
 </script>
 
 <script id="round-score-template" type="text/template">
     <tr>
-        <td class="position"></td>
-        <td class="username"></td>
-        <td class="kills"></td>
-        <td class="deaths"></td>
-        <td class="suicides"></td>
-        <td class="score"></td>
-        <td class="rating"></td>
+        <td><%= position %></td>
+        <%if (anon) {%>
+        <td><%=username %> <span class="label notice">Not registered</span></td>
+        <% } else { %>
+        <td><a href="#!/pilot/<%= username %>"><%= username %></a></td>
+        <% } %>
+        <td><%= kills %></td>
+        <td><%= deaths %></td>
+        <td><%= suicides %></td>
+        <td><%= score %></td>
+        <td><%= (anon ? "" : (rating > 0) ? ("+ " + rating) : ("- " + (rating * -1))) %></td>
     </tr>
+</script>
+<script id="round-kill-template" type="text/template">
+    <table class="table">
+        <thead>
+            <th></th>
+            <% for (var username in killData) { %>
+                <th><%= username %></th>
+            <% } %>
+        </thead>
+        <tbody>
+            <% for (var killer in killData) { %>
+                <tr>
+                    <% for (var victim in killData) { %>
+                    <td><%=killData[killer][victim] %></td>
+                    <% } %>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
 </script>
 
 <script id="rounds-content-template" type="text/template">
@@ -447,10 +468,10 @@
 
 <script id="rounds-round-template" type="text/template">
     <tr>
-        <td class="round-arena"></td>
-        <td class="round-started"></td>
-        <td class="round-ended"></td>
-        <td class="round-winner"></td>
+        <td><a href="#!/round/<%= id  %>"><%= arena  %></a></td>
+        <td><%= started  %></td>
+        <td><%= ended %></td>
+        <td><%= winner %> (<small><%= score %></small>)</td>
     </tr>
 </script>
 

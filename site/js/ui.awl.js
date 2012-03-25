@@ -75,6 +75,7 @@
 
 
     waitForPlayersModal = $(tmpl('awl-wait-for-player-template', {full: (server.currentclient >= server.maxclients)}));
+    waitForPlayersModal.modal({backdrop: 'static'});
     waitForPlayersModal.modal("show");
 
     waitForPlayersModal.find('.start-now').click(function (e) {
