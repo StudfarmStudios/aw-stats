@@ -87,99 +87,99 @@ clients.emit = function () {
 
 };
 
-io.sockets.on('connection', function (socket) {
-  clients.push(socket);
-  console.log("Socket connected");
-  socket.on('auth', function (token) {
-    console.log("Client auth with token " + token);
-    var waitAndPlays = [];
-    repositories.pilot.getPilotByToken(token, function (err, pilot) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      io.sockets.emit('pilot_logged_in', {_id: pilot._id, username: pilot.username});
-      console.log(pilot.username + " auth socket session");
-      socket.on('pilot_joining', function (server) {
-        io.sockets.emit('pilot_joining', {_id: pilot._id, username: pilot.username}, server);
-      });
-      socket.on('pilot_waiting', function (server) {
-        io.sockets.emit('pilot_added_to_wait_and_play', {_id: pilot._id, username: pilot.username}, server);
-        waitAndPlays.push(server.id);
-        repositories.waitandplay.addWaitAndPlay(server.id, pilot._id);
-
-        repositories.server.getServer(server.id, function (err, server) {
-          if (err || server == null || server.id == undefined) {
-            return;
-          }
-          clients.emit('server_update', {
-            id: server.id,
-            name: server.name,
-            waiting: server.waiting || 0,
-            currentclients: Number(server.currentclients),
-            maxclients: Number(server.maxclients)
-          });
+if (process.env.NODE_ENV != 'development') {
+  io.sockets.on('connection', function (socket) {
+    clients.push(socket);
+    console.log("Socket connected");
+    socket.on('auth', function (token) {
+      console.log("Client auth with token " + token);
+      var waitAndPlays = [];
+      repositories.pilot.getPilotByToken(token, function (err, pilot) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        io.sockets.emit('pilot_logged_in', {_id: pilot._id, username: pilot.username});
+        console.log(pilot.username + " auth socket session");
+        socket.on('pilot_joining', function (server) {
+          io.sockets.emit('pilot_joining', {_id: pilot._id, username: pilot.username}, server);
         });
-
-      });
-      socket.on('pilot_not_waiting', function (server) {
-        io.sockets.emit('pilot_removed_from_wait_and_play', {_id: pilot._id, username: pilot.username}, server);
-        repositories.waitandplay.removeWaitAndPlay(server.id, pilot._id, function (err) {
-          if (err) {
-            console.log(err);
-            return;
-          }
-          waitAndPlays = waitAndPlays.filter(function (serverId) {
-            return !(serverId == server.id);
-          });
+        socket.on('pilot_waiting', function (server) {
+          io.sockets.emit('pilot_added_to_wait_and_play', {_id: pilot._id, username: pilot.username}, server);
+          waitAndPlays.push(server.id);
+          repositories.waitandplay.addWaitAndPlay(server.id, pilot._id);
 
           repositories.server.getServer(server.id, function (err, server) {
-          if (err || server == null || server.id == undefined) {
-            return;
-          }
-          clients.emit('server_update', {
-            id: server.id,
-            name: server.name,
-            waiting: server.waiting || 0,
-            currentclients: Number(server.currentclients),
-            maxclients: Number(server.maxclients)
+            if (err || server == null || server.id == undefined) {
+              return;
+            }
+            clients.emit('server_update', {
+              id: server.id,
+              name: server.name,
+              waiting: server.waiting || 0,
+              currentclients: Number(server.currentclients),
+              maxclients: Number(server.maxclients)
+            });
+          });
+
+        });
+        socket.on('pilot_not_waiting', function (server) {
+          io.sockets.emit('pilot_removed_from_wait_and_play', {_id: pilot._id, username: pilot.username}, server);
+          repositories.waitandplay.removeWaitAndPlay(server.id, pilot._id, function (err) {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            waitAndPlays = waitAndPlays.filter(function (serverId) {
+              return !(serverId == server.id);
+            });
+
+            repositories.server.getServer(server.id, function (err, server) {
+            if (err || server == null || server.id == undefined) {
+              return;
+            }
+            clients.emit('server_update', {
+              id: server.id,
+              name: server.name,
+              waiting: server.waiting || 0,
+              currentclients: Number(server.currentclients),
+              maxclients: Number(server.maxclients)
+            });
+          });
+
           });
         });
 
+        socket.on('logout', function () {
+          console.log(pilot.username + " logged out");
+          io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
+          socket.removeAllListeners('pilot_waiting');
+          socket.removeAllListeners('pilot_not_waiting');
+          socket.removeAllListeners('pilot_joining');
         });
-      });
 
-      socket.on('logout', function () {
-        console.log(pilot.username + " logged out");
-        io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
-        socket.removeAllListeners('pilot_waiting');
-        socket.removeAllListeners('pilot_not_waiting');
-        socket.removeAllListeners('pilot_joining');
-      });
-
-      socket.on('disconnect', function () {
-        clients.splice(clients.indexOf(socket), 1);
-        io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
-        waitAndPlays.forEach(function (serverId) {
-          repositories.waitandplay.removeWaitAndPlay(serverId, pilot._id);
+        socket.on('disconnect', function () {
+          clients.splice(clients.indexOf(socket), 1);
+          io.sockets.emit('pilot_logged_out', {_id: pilot._id, username: pilot.username});
+          waitAndPlays.forEach(function (serverId) {
+            repositories.waitandplay.removeWaitAndPlay(serverId, pilot._id);
+          });
         });
       });
     });
   });
-});
+  emitter.on('server_update', function (server) {
+    clients.emit('server_update', server);
+  });
 
-emitter.on('server_update', function (server) {
-  clients.emit('server_update', server);
-});
+  emitter.on('server_remove', function (server) {
+    clients.emit('server_remove', server);
+  });
 
-emitter.on('server_remove', function (server) {
-  clients.emit('server_remove', server);
-});
-
-emitter.on('server_add', function (server) {
-  clients.emit('server_add', server);
-});
-
+  emitter.on('server_add', function (server) {
+    clients.emit('server_add', server);
+  });
+};
 
 app.io = io;
 
