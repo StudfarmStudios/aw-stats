@@ -64,12 +64,13 @@ function defineRoutesAndMiddleware(app) {
 var app = express.createServer();
 defineRoutesAndMiddleware(app);
 
+
 var sio = require('socket.io')
     , RedisStore = sio.RedisStore
     , io = sio.listen(app);
 
 // Somehow pass this information to the workers
-io.set('store', new RedisStore());
+//io.set('store', new RedisStore());
 
 
 repositories.waitandplay.removeAll();
