@@ -5,7 +5,7 @@ var geoip = require('connect-geoip').geoip;
 var repositories = require('./lib/repositories');
 var settings = require('./lib/settings');
 var redisevents = require('./lib/rediseventemitter');
-var emitter = new redisevents.EventEmitter("server_info");
+var emitter = new redisevents.EventEmitter("server_info" + (process.env.NODE_ENV || ""));
 
 
 var options = {
