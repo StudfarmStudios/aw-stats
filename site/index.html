@@ -68,7 +68,7 @@
                     </div>
                     <div class="span2 item">
                         <ul class="<%=equipment[i].type%>-list" data-type="<%=equipment[i].type%>">
-                            <% for (var x = 0; x < equipment[0].options.length; x++) { %>
+                            <% for (var x = 0; x < equipment[i].options.length; x++) { %>
                             <li class="<%=(equipment[i].options[x].fav?'selected-equipment':'not-selected-equipment')%>" data-value="<%=equipment[i].options[x].value%>">
                                 <div class="image"><img src="<%=equipment[i].options[x].img%>" /></div>
                                 <div class="name"><%=equipment[i].options[x].name%></div>
@@ -541,7 +541,7 @@
 <script src="js/3rdparty/html5.js"></script>
 <![endif]-->
 <script src="socket.io/socket.io.js"></script>
-<script src="build/js.js?_4"></script>
+<script src="build/js.js?_5"></script>
 
 <!-- Le styles -->
 <link rel="stylesheet" href="build/css.css?_2">
