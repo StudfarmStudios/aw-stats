@@ -24,7 +24,8 @@
       options: [
         {name: "Blink", value: "blink", img: "images/stats_blink.png"},
         {name: "Repulsor", value: "repulsor", img: "images/stats_repulsor.png"},
-        {name: "Catmoflage", value: "catmoflage", img: "images/stats_catmoflage.png"}
+        {name: "Catmoflage", value: "catmoflage", img: "images/stats_catmoflage.png"},
+        {name: "Shield", value: "shield", img: "images/stats_shield.png"}
       ]
     },
     {
