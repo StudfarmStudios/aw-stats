@@ -75,6 +75,8 @@
             suffix = "st";
           } else if (value == 2) {
             suffix = "nd";
+          } else if (value == 3) {
+            suffix = "rd";
           }
           content.find('.' + type.replace('.', '-')).html(value + suffix);
         }
