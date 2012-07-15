@@ -35,7 +35,7 @@
         {name: "Bazooka", value: "bazooka", img: "images/stats_bazooka.png"},
         {name: "Rockets", value: "rockets", img: "images/stats_rockets.png"},
         {name: "Hovermine", value: "hovermine", img: "images/stats_hovermine.png"},
-        {name: "Power Cone", value: "powercone", img: "images/stats_powercone.png"}
+        {name: "Fusion Cone", value: "fusioncone", img: "images/stats_fusioncone.png"}
       ]
     }
 
